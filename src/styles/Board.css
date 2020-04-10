@@ -1,0 +1,4 @@
+.board {
+  display: flex;
+  width: 288px;
+}

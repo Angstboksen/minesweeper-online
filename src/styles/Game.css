@@ -1,40 +1,47 @@
 #game {
-  margin: 0 auto;
-  width: 320px;
+    margin: 0 +auto;
+    width: 320px;
 }
+
 #menu {
-  clear: both;
-  height: 33px;
-  line-height: 33px;
-  margin-bottom: 10px;
+    clear: both;
+    height: 33px;
+    line-height: 33px;
+    margin-bottom: 10px;
 }
+
 #restart {
-  float: right;
-  padding: 8px 15px;
-  background-color: gray;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
+    float: right;
+    padding: 8px 15px;
+    background-color: gray;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
 }
+
 #restart:hover {
-  opacity: .8;
+    opacity: .8;
 }
+
 #bomb {
-  height: 33px;
-  line-height: 33px;
-  margin-right: 5px;
+    height: 33px;
+    line-height: 33px;
+    margin-right: 5px;
 }
+
 .status {
-  height: 33px;
-  line-height: 33px;
-  font-weight: bold;
+    height: 33px;
+    line-height: 33px;
+    font-weight: bold;
 }
+
 #gameover {
-  color: red;
+    color: red;
 }
+
 #clear {
-  color: green;
+    color: green;
 }

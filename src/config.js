@@ -28,7 +28,7 @@ const config = {
     boardHeight: 48,
     bombNum: 777,
     cellSize: 24
-  }
+  },
 }
 
 export default config

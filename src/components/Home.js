@@ -16,7 +16,7 @@ class Home extends Component {
             return (
                 <div>
                     <p>You are not signed in. Click here to sign in.</p>
-                    <div className="g-signin2" data-onsuccess="onSignIn">Log in</div>
+                    <div className="g-signin2" data-onsuccess="onSignIn"></div>
                 </div>
             )
         }

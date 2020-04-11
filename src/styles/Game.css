@@ -42,6 +42,10 @@
     color: red;
 }
 
+#running {
+    color: blue;
+}
+
 #clear {
     color: green;
 }

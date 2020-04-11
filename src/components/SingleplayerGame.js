@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Bomb from 'react-icons/lib/fa/certificate'
-import Board from './Board'
 import config from '../config'
 import { toggle, init, changeDifficulty, gameover, clear } from '../actions'
 import '../styles/Game.css'
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
+import Game from './Game'
 
 class SingleplayerGame extends Component {
 
@@ -192,40 +191,34 @@ class SingleplayerGame extends Component {
 
   render() {
     const { board } = this.state
-    const { difficulty, gameover, clear, bomb } = this.props
+    const { difficulty, bomb } = this.props
     const { boardWidth, cellSize } = config[difficulty]
     const boardWidthPx = boardWidth * cellSize
+    const { gameover, clear } = this.props
     let status = <span className="status"></span>
     if (gameover) {
       status = <span id="gameover" className="status">Gameover</span>
     } else if (clear) {
       status = <span id="clear" className="status">Clear!</span>
+    } else{
+      status = <span id="running" className="status">Still going strong!</span>
     }
     return (
       <div >
         <button onClick={this._gotoMultiplayer}>Go to multiplayer</button>
-        <div id="game" style={{ width: boardWidthPx }}>
-          <h1>Minesweeper</h1>
-          <div id="menu">
-            <button onClick={this.handleClick} id="restart">Restart</button>
-            <select value={difficulty} onChange={(e) => this.changeDifficulty(e)} style={{ marginRight: 5 }}>
-              <option value={'easy'} key={'easy'}>Easy</option>
-              <option value={'normal'} key={'normal'}>Normal</option>
-              <option value={'hard'} key={'hard'}>Hard</option>
-              <option value={'veryHard'} key={'veryHard'}>Very Hard</option>
-              <option value={'maniac'} key={'maniac'}>Maniac</option>
-            </select>
-            <span id="bomb"><Bomb style={{ marginTop: -3 }} /> {bomb}</span>
-            {status}
-          </div>
-          <Board
-            board={board}
-            cellSize={cellSize}
-            onClick={this.handleClickCell}
-            onRightClick={this.handleRightClickCell}
-            onDoubleClick={this.handleDoubleClickCell}
-          />
-        </div>
+        <h1>Minesweeper Singleplayer</h1>
+        {status}
+
+        <Game
+          board={board}
+          cellSize={cellSize}
+          difficulty={difficulty}
+          bomb={bomb}
+          boardWidthPx={boardWidthPx}
+          handleClick={this.handleClick}
+          handleClickCell={this.handleClickCell}
+          handleRightClickCell={this.handleRightClickCell}
+          handleDoubleClickCell={this.handleDoubleClickCell} />
       </div>
     )
   }

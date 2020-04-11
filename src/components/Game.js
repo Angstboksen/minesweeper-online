@@ -108,14 +108,17 @@ class Game extends Component {
 
   showAllBombs = (board) => {
     const { boardWidth, boardHeight } = config[this.props.difficulty]
-    for (let i = 0; i < boardHeight; i++) {
-      for (let j = 0; j < boardWidth; j++) {
-        if (board[i][j].bomb) {
-          board[i][j] = Object.assign({}, board[i][j], { open: true })
-          this.setState({ board })
-        }
+    for (let bomb of this.bombPlaces) {
+      let x = bomb.x
+      let y = bomb.y
+      console.log("yerer")
+      if (board[x][y].bomb) {
+        board[x][y] = Object.assign({}, board[x][y], { open: true })
       }
     }
+    this.setState({ board }, () => {
+      this.props.dispatch(gameover())
+    })
   }
 
   _open(x, y) {
@@ -142,7 +145,6 @@ class Game extends Component {
       }
       if (board[x][y].bomb) {
         this.showAllBombs(board)
-        this.props.dispatch(gameover())
       }
       if (this._isClear(board)) {
         this.props.dispatch(clear())

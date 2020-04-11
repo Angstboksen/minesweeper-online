@@ -16,7 +16,6 @@ class Game extends Component {
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
     this.handleDoubleClickCell = this.handleDoubleClickCell.bind(this)
-    this.bombPlaces = []
   }
 
   _initBoard(difficulty) {
@@ -107,6 +106,7 @@ class Game extends Component {
   }
 
   showAllBombs = (board) => {
+    console.log(board)
     const { boardWidth, boardHeight } = config[this.props.difficulty]
     for (let bomb of this.bombPlaces) {
       let x = bomb.x

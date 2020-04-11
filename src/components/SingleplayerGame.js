@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import config from '../config'
-import { toggle, init, changeDifficulty, gameover, clear } from '../actions'
+import { toggle, init, gameover, clear } from '../actions'
 import '../styles/Game.css'
 import { withRouter } from 'react-router-dom'
 import Game from './Game'
@@ -99,12 +99,6 @@ class SingleplayerGame extends Component {
     }
   }
 
-  changeDifficulty(e) {
-    const difficulty = e.target.value
-    this.props.dispatch(changeDifficulty(difficulty))
-    this.setState({ board: this._initBoard(difficulty) })
-  }
-
   showAllBombs = (board) => {
     for (let bomb of this.bombPlaces) {
       let x = bomb.x
@@ -189,6 +183,24 @@ class SingleplayerGame extends Component {
     this.props.history.push("/multiplayer")
   }
 
+  updateBoard = (difficulty) => {
+    console.log(difficulty)
+    this.setState({ board: this._initBoard(difficulty) })
+  }
+
+  setDifficulty = () => {
+    let width = document.getElementById("widthinput").value
+    let height = document.getElementById("heightinput").value
+    let difficulty = {
+      name: "custom",
+      boardWidth: width,
+      boardHeight: height,
+      bombNum: width*height/0.20,
+      cellSize: 32
+    }
+    this.updateBoard(difficulty.name)
+  }
+
   render() {
     const { board } = this.state
     const { difficulty, bomb } = this.props
@@ -200,14 +212,17 @@ class SingleplayerGame extends Component {
       status = <span id="gameover" className="status">Gameover</span>
     } else if (clear) {
       status = <span id="clear" className="status">Clear!</span>
-    } else{
+    } else {
       status = <span id="running" className="status">Still going strong!</span>
     }
     return (
       <div >
         <button onClick={this._gotoMultiplayer}>Go to multiplayer</button>
         <h1>Minesweeper Singleplayer</h1>
-        {status}
+        <input type="number" id="widthinput" placeholder="Width..." />
+        <input type="number" id="heightinput" placeholder="Height..." />
+        <button onClick={this.setDifficulty}>Start game</button>
+        <p>{status}</p>
 
         <Game
           board={board}
@@ -215,6 +230,9 @@ class SingleplayerGame extends Component {
           difficulty={difficulty}
           bomb={bomb}
           boardWidthPx={boardWidthPx}
+          changeDifficulty={this.changeDifficulty}
+          dispatch={this.props.dispatch}
+          updateBoard={this.updateBoard}
           handleClick={this.handleClick}
           handleClickCell={this.handleClickCell}
           handleRightClickCell={this.handleRightClickCell}

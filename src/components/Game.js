@@ -183,27 +183,29 @@ class Game extends Component {
       status = <span id="clear" className="status">Clear!</span>
     }
     return (
-      <div id="game" style={{ width: boardWidthPx }}>
-        <h1>Minesweeper</h1>
-        <div id="menu">
-          <button onClick={this.handleClick} id="restart">Restart</button>
-          <select value={difficulty} onChange={(e) => this.changeDifficulty(e)} style={{ marginRight: 5 }}>
-            <option value={'easy'} key={'easy'}>Easy</option>
-            <option value={'normal'} key={'normal'}>Normal</option>
-            <option value={'hard'} key={'hard'}>Hard</option>
-            <option value={'veryHard'} key={'veryHard'}>Very Hard</option>
-            <option value={'maniac'} key={'maniac'}>Maniac</option>
-          </select>
-          <span id="bomb"><Bomb style={{ marginTop: -3 }} /> {bomb}</span>
-          {status}
+      <div>
+        <div id="game" style={{ width: boardWidthPx }}>
+          <h1>Minesweeper</h1>
+          <div id="menu">
+            <button onClick={this.handleClick} id="restart">Restart</button>
+            <select value={difficulty} onChange={(e) => this.changeDifficulty(e)} style={{ marginRight: 5 }}>
+              <option value={'easy'} key={'easy'}>Easy</option>
+              <option value={'normal'} key={'normal'}>Normal</option>
+              <option value={'hard'} key={'hard'}>Hard</option>
+              <option value={'veryHard'} key={'veryHard'}>Very Hard</option>
+              <option value={'maniac'} key={'maniac'}>Maniac</option>
+            </select>
+            <span id="bomb"><Bomb style={{ marginTop: -3 }} /> {bomb}</span>
+            {status}
+          </div>
+          <Board
+            board={board}
+            cellSize={cellSize}
+            onClick={this.handleClickCell}
+            onRightClick={this.handleRightClickCell}
+            onDoubleClick={this.handleDoubleClickCell}
+          />
         </div>
-        <Board
-          board={board}
-          cellSize={cellSize}
-          onClick={this.handleClickCell}
-          onRightClick={this.handleRightClickCell}
-          onDoubleClick={this.handleDoubleClickCell}
-        />
       </div>
     )
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
+import Header from './Header';
 
 class Home extends Component {
 
@@ -15,8 +16,7 @@ class Home extends Component {
         } else {
             return (
                 <div>
-                    <p>You are not signed in. Click here to sign in.</p>
-                    <div className="g-signin2" data-onsuccess="onSignIn"></div>
+                    <p>You are not signed in</p>
                 </div>
             )
         }
@@ -25,8 +25,11 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <h1>Home page</h1>
-                {this.getContent()}
+                <Header />
+                <div>
+                    <h1>Home page</h1>
+                    {this.getContent()}
+                </div>
             </div>
         );
     }

@@ -5,8 +5,9 @@ import Board from './Board'
 import config from '../config'
 import { toggle, init, changeDifficulty, gameover, clear } from '../actions'
 import '../styles/Game.css'
+import {withRouter} from 'react-router-dom'
 
-class Game extends Component {
+class SingleplayerGame extends Component {
 
   constructor(props) {
     super(props)
@@ -106,12 +107,9 @@ class Game extends Component {
   }
 
   showAllBombs = (board) => {
-    console.log(board)
-    const { boardWidth, boardHeight } = config[this.props.difficulty]
     for (let bomb of this.bombPlaces) {
       let x = bomb.x
       let y = bomb.y
-      console.log("yerer")
       if (board[x][y].bomb) {
         board[x][y] = Object.assign({}, board[x][y], { open: true })
       }
@@ -188,6 +186,10 @@ class Game extends Component {
     this.props.dispatch(toggle(!flagged))
   }
 
+  _gotoMultiplayer = () => {
+    this.props.history.push("/multiplayer")
+  }
+
   render() {
     const { board } = this.state
     const { difficulty, gameover, clear, bomb } = this.props
@@ -200,7 +202,8 @@ class Game extends Component {
       status = <span id="clear" className="status">Clear!</span>
     }
     return (
-      <div>
+      <div >
+        <button onClick={this._gotoMultiplayer}>Go to multiplayer</button>
         <div id="game" style={{ width: boardWidthPx }}>
           <h1>Minesweeper</h1>
           <div id="menu">
@@ -230,4 +233,4 @@ class Game extends Component {
 
 const mapStateToProps = (state) => state.game
 
-export default connect(mapStateToProps)(Game)
+export default withRouter(connect(mapStateToProps)(SingleplayerGame))

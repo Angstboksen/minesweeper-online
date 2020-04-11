@@ -7,6 +7,7 @@ import { toggle, init, changeDifficulty, gameover, clear } from '../actions'
 import '../styles/Game.css'
 
 class Game extends Component {
+
   constructor(props) {
     super(props)
     const { difficulty } = this.props
@@ -15,17 +16,18 @@ class Game extends Component {
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
     this.handleDoubleClickCell = this.handleDoubleClickCell.bind(this)
+    this.bombPlaces = []
   }
 
   _initBoard(difficulty) {
-    const bombPlaces = this._initBombPlaces(difficulty)
+    this.bombPlaces = this._initBombPlaces(difficulty)
     const { boardWidth, boardHeight } = config[difficulty]
     const board = Array.from(
       new Array(boardWidth), () => new Array(boardHeight).fill(
         { bomb: false, bombCount: 0, open: false, flagged: false }
       )
     )
-    for (let place of bombPlaces) {
+    for (let place of this.bombPlaces) {
       board[place.x][place.y] = Object.assign({}, board[place.x][place.y], { bomb: true })
     }
     return board
@@ -104,6 +106,18 @@ class Game extends Component {
     this.setState({ board: this._initBoard(difficulty) })
   }
 
+  showAllBombs = (board) => {
+    const { boardWidth, boardHeight } = config[this.props.difficulty]
+    for (let i = 0; i < boardHeight; i++) {
+      for (let j = 0; j < boardWidth; j++) {
+        if (board[i][j].bomb) {
+          board[i][j] = Object.assign({}, board[i][j], { open: true })
+          this.setState({ board })
+        }
+      }
+    }
+  }
+
   _open(x, y) {
     const board = [].concat(this.state.board)
     const { boardWidth, boardHeight } = config[this.props.difficulty]
@@ -127,6 +141,7 @@ class Game extends Component {
         this._toggleFlag(x, y)
       }
       if (board[x][y].bomb) {
+        this.showAllBombs(board)
         this.props.dispatch(gameover())
       }
       if (this._isClear(board)) {

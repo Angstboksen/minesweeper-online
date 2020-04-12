@@ -5,6 +5,7 @@ import { toggle, init, gameover, clear } from '../actions'
 import '../styles/Game.css'
 import { withRouter } from 'react-router-dom'
 import Game from './Game'
+import Header from './Header'
 
 class SingleplayerGame extends Component {
 
@@ -217,6 +218,7 @@ class SingleplayerGame extends Component {
     }
     return (
       <div >
+        <Header/>
         <button onClick={this._gotoMultiplayer}>Go to multiplayer</button>
         <h1>Minesweeper Singleplayer</h1>
         <input type="number" id="widthinput" placeholder="Width..." />

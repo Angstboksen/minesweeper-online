@@ -4,22 +4,19 @@ import Header from './Header';
 
 class Home extends Component {
 
-    _enterGame = () => {
-        console.log("Hoik")
-        this.props.history.push("/game")
-
+    state = {
+        isSignedIn: false
     }
 
     getContent = () => {
-        if (this.props.isSignedIn) {
-            return <p>hello user, you're signed in </p>
-        } else {
-            return (
+        return (
+            this.state.isSignedIn ?
+                <p>hello user, you're signed in </p>
+                :
                 <div>
                     <p>You are not signed in</p>
                 </div>
-            )
-        }
+        )
     }
 
     render() {

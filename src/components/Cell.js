@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Flag from 'react-icons/lib/fa/flag'
-import Bomb from 'react-icons/lib/fa/certificate'
+import {FaFlag} from 'react-icons/fa'
+import {GiFireBomb} from 'react-icons/gi'
 import '../styles/Cell.css'
 
 const baseStyle = {
@@ -42,7 +42,7 @@ export default class Cell extends Component {
   }
 
   render() {
-    let content = this.props.cell.flagged ? <Flag /> : ''
+    let content = this.props.cell.flagged ? <FaFlag /> : ''
     let style = Object.assign({}, baseStyle, {
       width: this.props.cellSize - 8,
       height: this.props.cellSize - 8,
@@ -55,7 +55,7 @@ export default class Cell extends Component {
         lineHeight: `${this.props.cellSize - 2}px`
       })
       if (this.props.cell.bomb) {
-        content = <Bomb style={{ marginTop: -3 }} />
+        content = <GiFireBomb style={{ marginTop: -3 }} />
         style = Object.assign({}, style, { backgroundColor: 'red' })
       } else {
         if (this.props.cell.bombCount > 0) {

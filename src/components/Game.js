@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Bomb from 'react-icons/lib/fa/certificate'
+import {GiFireBomb} from "react-icons/gi"
 import Board from './Board'
 import {changeDifficulty} from '../actions'
 
@@ -23,8 +23,7 @@ export class Game extends Component {
                         <option value={'veryHard'} key={'veryHard'}>Very Hard</option>
                         <option value={'maniac'} key={'maniac'}>Maniac</option>
                     </select>
-                    <span id="bomb"><Bomb style={{ marginTop: -3 }} /> {this.props.bomb}</span>
-                    {status}
+                    <span id="bomb"><GiFireBomb style={{ marginTop: -3 }} /> {this.props.bomb}</span>
                 </div>
                 <Board
                     board={this.props.board}

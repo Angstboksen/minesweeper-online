@@ -61,10 +61,10 @@ class SingleplayerGame extends Component {
 
   handleClickCell(x, y) {
     const { gameover, clear } = this.props
-    if (gameover || clear) {
+    if (gameover || clear || this.state.board[x][y].flagged) {
       return
     }
-    this._open(x, y)
+      this._open(x, y)
   }
 
   handleRightClickCell(x, y) {
@@ -82,7 +82,7 @@ class SingleplayerGame extends Component {
     if (gameover || clear) {
       return
     }
-    if (board[x][y].open) {
+    if (board[x][y].open || board[x][y].flagged) {
       return
     }
 

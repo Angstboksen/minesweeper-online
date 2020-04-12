@@ -82,7 +82,7 @@ class SingleplayerGame extends Component {
     if (gameover || clear) {
       return
     }
-    if (!board[x][y].open) {
+    if (board[x][y].open) {
       return
     }
 
@@ -114,8 +114,8 @@ class SingleplayerGame extends Component {
 
   _open(x, y) {
     const board = [].concat(this.state.board)
-    const { boardWidth, boardHeight } = config[this.props.difficulty]
     if (!board[x][y].open) {
+      const { boardWidth, boardHeight } = config[this.props.difficulty]
       let bombCount = 0
       for (let i = x - 1; i <= x + 1; i++) {
         for (let j = y - 1; j <= y + 1; j++) {
@@ -195,7 +195,7 @@ class SingleplayerGame extends Component {
       name: "custom",
       boardWidth: width,
       boardHeight: height,
-      bombNum: width*height/0.20,
+      bombNum: width * height / 0.20,
       cellSize: 32
     }
     this.updateBoard(difficulty.name)

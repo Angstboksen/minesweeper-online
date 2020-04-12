@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import SingleplayerGame from './SingleplayerGame'
 import Home from './Home'
 import Multiplayer from './Multiplayer';
-import {DEFAULT_WRAPPER_STATE} from '../constants'
+import { DEFAULT_WRAPPER_STATE } from '../constants'
 
 
 class Wrapper extends Component {
@@ -11,9 +11,9 @@ class Wrapper extends Component {
     state = DEFAULT_WRAPPER_STATE
 
     _login = (response) => {
-        const {name, email, imageUrl} = response.profileObj
+        const { name, email, imageUrl } = response.profileObj
         this.setState({
-            username : name,
+            username: name,
             useremail: email,
             userimageurl: imageUrl,
             isSignedIn: true
@@ -27,7 +27,7 @@ class Wrapper extends Component {
     _resetState = () => {
         this.setState(DEFAULT_WRAPPER_STATE)
     }
-    
+
     render() {
         return (
             <Router>
@@ -35,16 +35,20 @@ class Wrapper extends Component {
                     <Switch>
                         <Route exact path="/">
                             <Home
-                             credentials={this.state}
-                             _login={this._login}
-                             _loginerror={this._loginerror}
-                             _resetState={this._resetState}/>
+                                credentials={this.state}
+                                _login={this._login}
+                                _loginerror={this._loginerror}
+                                _resetState={this._resetState} />
                         </Route>
                         <Route path="/singleplayer">
-                            <SingleplayerGame/>
+                            <SingleplayerGame
+                                credentials={this.state}
+                                _login={this._login}
+                                _loginerror={this._loginerror}
+                                _resetState={this._resetState} />
                         </Route>
                         <Route path="/multiplayer">
-                            <Multiplayer/>
+                            <Multiplayer />
                         </Route>
                     </Switch>
                 </div>

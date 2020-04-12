@@ -65,7 +65,7 @@ class SingleplayerGame extends Component {
     if (gameover || clear || this.state.board[x][y].flagged) {
       return
     }
-      this._open(x, y)
+    this._open(x, y)
   }
 
   handleRightClickCell(x, y) {
@@ -218,7 +218,13 @@ class SingleplayerGame extends Component {
     }
     return (
       <div >
-        <Header/>
+        <Header
+          credentials={this.props.credentials}
+          _resetState={this.props._resetState}
+          _login={this.props._login}
+          _loginerror={this.props._loginerror}
+          history={this.props.history}
+        />
         <button onClick={this._gotoMultiplayer}>Go to multiplayer</button>
         <h1>Minesweeper Singleplayer</h1>
         <input type="number" id="widthinput" placeholder="Width..." />

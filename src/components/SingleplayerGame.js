@@ -13,7 +13,7 @@ class SingleplayerGame extends Component {
   constructor(props) {
     super(props)
     const { difficulty } = this.props
-    this.state = { board: this._initBoard(difficulty), seconds: 0}
+    this.state = { board: this._initBoard(difficulty), hundreds: 0 }
     this.handleClick = this.handleClick.bind(this)
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
@@ -72,7 +72,7 @@ class SingleplayerGame extends Component {
 
   handleRightClickCell(x, y) {
     const { gameover, clear } = this.props
-    if (gameover || clear) {
+    if (gameover || clear || this.state.board[x][y].open) {
       return
     }
     this._toggleFlag(x, y)
@@ -171,7 +171,7 @@ class SingleplayerGame extends Component {
       row.forEach((cell, i) => {
         if (cell.open) {
           openCount++
-        } else if(cell.flagged) {
+        } else if (cell.flagged) {
           flagCount++
         }
       })
@@ -209,36 +209,42 @@ class SingleplayerGame extends Component {
   }
 
   _startTimer = async () => {
-    this.setState({ gameIsRunning: true, seconds: -1}, async () => {
+    this.setState({ gameIsRunning: true, hundreds: 0 }, async () => {
       while (this.state.gameIsRunning) {
-        this.setState({ seconds: this.state.seconds += 1 })
-        await new Promise(r => setTimeout(r, 1000));
+        this.setState({ hundreds: this.state.hundreds += 1 })
+        await new Promise(r => setTimeout(r, 1));
       }
     })
   }
 
   _stopTimer = (reset = false) => {
-    if(reset) {
-      this.setState({ gameIsRunning: false, seconds: 0})
+    if (reset) {
+      this.setState({ gameIsRunning: false, hundreds: 0 })
     } else {
       this.setState({ gameIsRunning: false })
     }
   }
 
-  formatClockValue = (isSeconds) => {
-    const {seconds} = this.state
-    if(isSeconds){
-      let s = seconds % 60
-      return (s >= 10 ? ""+s : "0"+s)
-    }else {
-      let m = Math.floor(seconds / 60)
-      return (m >= 10 ? ""+m : "0"+m)
+  formatClockValue = (type) => {
+    const { hundreds } = this.state
+    switch (type) {
+      case "minutes":
+        let m = Math.floor((hundreds / 6000)) 
+        return (m >= 10 ? "" + m : "0" + m)
+      case "seconds":
+        let s = Math.floor(hundreds / 100) % 60
+        return (s >= 10 ? "" + s : "0" + s)
+      case "hundreds":
+        let mi = hundreds.toString()
+        mi = mi.substring(mi.length-2)
+        return mi
+      default:
+        return 0
     }
-
   }
 
   render() {
-    const { board, seconds, gameIsRunning } = this.state
+    const { board, gameIsRunning } = this.state
     const { difficulty, bomb } = this.props
     const { boardWidth, cellSize } = config[difficulty]
     const boardWidthPx = boardWidth * cellSize
@@ -267,17 +273,24 @@ class SingleplayerGame extends Component {
         <div>
           <h1>Minesweeper Singleplayer</h1>
           <h2>{status}</h2>
+          <h5>Time</h5>
           <div className="clock">
             <div className="clockWrapper">
               <div className="minutes">
                 <div className="first">
-                 <div className="number">{this.formatClockValue(false)}</div>
+                  <div className="number">{this.formatClockValue("minutes")}</div>
                 </div>
               </div>
               <div className="tick">:</div>
               <div className="seconds">
                 <div className="first">
-                  <div className="number">{this.formatClockValue(true)}</div>
+                  <div className="number">{this.formatClockValue("seconds")}</div>
+                </div>
+              </div>
+              <div className="tick">.</div>
+              <div className="hundreds">
+                <div className="first">
+                  <div className="number">{this.formatClockValue("hundreds")}</div>
                 </div>
               </div>
             </div>

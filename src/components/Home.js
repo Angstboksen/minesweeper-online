@@ -5,22 +5,17 @@ import Header from './Header';
 class Home extends Component {
 
     getContent = () => {
-        const {isSignedIn, username} = this.props.credentials
-        return (
-            isSignedIn ?
-                <div>
-                    <p>Hello {username}, you're signed in </p>
-                </div>
-                :
-                <div>
-                    <p>You are not signed in</p>
-                </div>
-        )
+        const { isSignedIn, username } = this.props.credentials
+        return isSignedIn ?
+            <p>Hello {username}, you're signed in </p>
+            :
+            <p>You are not signed in</p>
+
     }
 
     render() {
         return (
-            <div style={{width : "100%"}}>
+            <div style={{ width: "100%" }}>
                 <Header
                     credentials={this.props.credentials}
                     _resetState={this.props._resetState}
@@ -30,7 +25,9 @@ class Home extends Component {
                     origin="home" />
                 <div>
                     <h1>Home page</h1>
-                    {this.getContent()}
+                    <div style={{ textAlign: "center" }}>
+                        {this.getContent()}
+                    </div>
                 </div>
             </div>
         );

@@ -1,4 +1,5 @@
 .board {
-  display: flex;
-  width: 288px;
+    margin: 0 60px;
+    display: flex;
+    width: 288px;
 }

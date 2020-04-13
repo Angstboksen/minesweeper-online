@@ -44,18 +44,18 @@ export default class Cell extends Component {
   render() {
     let content = this.props.cell.flagged ? <FaFlag /> : ''
     let style = Object.assign({}, baseStyle, {
-      width: this.props.cellSize - 8,
-      height: this.props.cellSize - 8,
-      lineHeight: `${this.props.cellSize - 8}px`,
+      width: this.props.cellSize,
+      height: this.props.cellSize,
+      lineHeight: `${this.props.cellSize-12}px`,
     })
     if (this.props.cell.open) {
       style = Object.assign({}, style, openStyle, {
-        width: this.props.cellSize - 2,
-        height: this.props.cellSize - 2,
-        lineHeight: `${this.props.cellSize - 2}px`
+        width: this.props.cellSize ,
+        height: this.props.cellSize ,
+        lineHeight: `${this.props.cellSize -2}px`
       })
       if (this.props.cell.bomb) {
-        content = <GiFireBomb style={{ marginTop: -3 }} />
+        content = <GiFireBomb style={{ marginTop: -4 }} />
         style = Object.assign({}, style, { backgroundColor: 'red' })
       } else {
         if (this.props.cell.bombCount > 0) {

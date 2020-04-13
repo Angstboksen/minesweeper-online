@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import SingleplayerGame from './SingleplayerGame'
 import Home from './Home'
-import Multiplayer from './Multiplayer';
+import MultiplayerGame from './MultiplayerGame';
 import { DEFAULT_WRAPPER_STATE } from '../constants'
 
 
@@ -31,7 +31,7 @@ class Wrapper extends Component {
     render() {
         return (
             <Router>
-                <div>
+                <>
                     <Switch>
                         <Route exact path="/">
                             <Home
@@ -48,10 +48,14 @@ class Wrapper extends Component {
                                 _resetState={this._resetState} />
                         </Route>
                         <Route path="/multiplayer">
-                            <Multiplayer />
+                            <MultiplayerGame
+                                credentials={this.state}
+                                _login={this._login}
+                                _loginerror={this._loginerror}
+                                _resetState={this._resetState} />
                         </Route>
                     </Switch>
-                </div>
+                </>
             </Router>
         );
     }

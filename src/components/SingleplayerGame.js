@@ -180,10 +180,6 @@ class SingleplayerGame extends Component {
     this.props.dispatch(toggle(!flagged))
   }
 
-  _gotoMultiplayer = () => {
-    this.props.history.push("/multiplayer")
-  }
-
   updateBoard = (difficulty) => {
     console.log(difficulty)
     this.setState({ board: this._initBoard(difficulty) })
@@ -217,34 +213,34 @@ class SingleplayerGame extends Component {
       status = <span id="running" className="status">Still going strong!</span>
     }
     return (
-      <div >
+      <div style={{ width: "100%" }}>
         <Header
           credentials={this.props.credentials}
           _resetState={this.props._resetState}
           _login={this.props._login}
           _loginerror={this.props._loginerror}
           history={this.props.history}
+          origin="singleplayer"
         />
-        <button onClick={this._gotoMultiplayer}>Go to multiplayer</button>
-        <h1>Minesweeper Singleplayer</h1>
-        <input type="number" id="widthinput" placeholder="Width..." />
-        <input type="number" id="heightinput" placeholder="Height..." />
-        <button onClick={this.setDifficulty}>Start game</button>
-        <p>{status}</p>
+        
+        <div>
+          <h1>Minesweeper Singleplayer</h1>
+          <p>{status}</p>
 
-        <Game
-          board={board}
-          cellSize={cellSize}
-          difficulty={difficulty}
-          bomb={bomb}
-          boardWidthPx={boardWidthPx}
-          changeDifficulty={this.changeDifficulty}
-          dispatch={this.props.dispatch}
-          updateBoard={this.updateBoard}
-          handleClick={this.handleClick}
-          handleClickCell={this.handleClickCell}
-          handleRightClickCell={this.handleRightClickCell}
-          handleDoubleClickCell={this.handleDoubleClickCell} />
+          <Game
+            board={board}
+            cellSize={cellSize}
+            difficulty={difficulty}
+            bomb={bomb}
+            boardWidthPx={boardWidthPx}
+            changeDifficulty={this.changeDifficulty}
+            dispatch={this.props.dispatch}
+            updateBoard={this.updateBoard}
+            handleClick={this.handleClick}
+            handleClickCell={this.handleClickCell}
+            handleRightClickCell={this.handleRightClickCell}
+            handleDoubleClickCell={this.handleDoubleClickCell} />
+        </div>
       </div>
     )
   }

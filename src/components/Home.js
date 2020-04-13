@@ -20,13 +20,14 @@ class Home extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{width : "100%"}}>
                 <Header
                     credentials={this.props.credentials}
                     _resetState={this.props._resetState}
                     _login={this.props._login}
                     _loginerror={this.props._loginerror}
-                    history={this.props.history} />
+                    history={this.props.history}
+                    origin="home" />
                 <div>
                     <h1>Home page</h1>
                     {this.getContent()}

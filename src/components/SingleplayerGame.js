@@ -9,10 +9,11 @@ import Header from './Header'
 
 class SingleplayerGame extends Component {
 
+
   constructor(props) {
     super(props)
     const { difficulty } = this.props
-    this.state = { board: this._initBoard(difficulty) }
+    this.state = { board: this._initBoard(difficulty), seconds: 0}
     this.handleClick = this.handleClick.bind(this)
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
@@ -20,6 +21,7 @@ class SingleplayerGame extends Component {
   }
 
   _initBoard(difficulty) {
+    this._stopTimer(true)
     this.bombPlaces = this._initBombPlaces(difficulty)
     const { boardWidth, boardHeight } = config[difficulty]
     const board = Array.from(
@@ -136,9 +138,11 @@ class SingleplayerGame extends Component {
         this._toggleFlag(x, y)
       }
       if (board[x][y].bomb) {
+        this._stopTimer()
         this.showAllBombs(board)
       }
       if (this._isClear(board)) {
+        this._stopTimer()
         this.props.dispatch(clear())
       }
 
@@ -160,16 +164,22 @@ class SingleplayerGame extends Component {
 
   _isClear(board) {
     let openCount = 0
+    let flagCount = 0
     const { difficulty } = this.props
-    const { boardWidth, boardHeight, bombNum } = config[difficulty]
+    const { boardWidth, boardHeight } = config[difficulty]
     board.forEach((row, i) => {
       row.forEach((cell, i) => {
         if (cell.open) {
           openCount++
+        } else if(cell.flagged) {
+          flagCount++
         }
       })
     })
-    return openCount === (boardWidth * boardHeight - bombNum)
+    if (openCount === 1) {
+      this._startTimer()
+    }
+    return openCount === (boardWidth * boardHeight - flagCount)
   }
 
   _toggleFlag(x, y) {
@@ -198,19 +208,50 @@ class SingleplayerGame extends Component {
     this.updateBoard(difficulty.name)
   }
 
+  _startTimer = async () => {
+    this.setState({ gameIsRunning: true, seconds: -1}, async () => {
+      while (this.state.gameIsRunning) {
+        this.setState({ seconds: this.state.seconds += 1 })
+        await new Promise(r => setTimeout(r, 1000));
+      }
+    })
+  }
+
+  _stopTimer = (reset = false) => {
+    if(reset) {
+      this.setState({ gameIsRunning: false, seconds: 0})
+    } else {
+      this.setState({ gameIsRunning: false })
+    }
+  }
+
+  formatClockValue = (isSeconds) => {
+    const {seconds} = this.state
+    if(isSeconds){
+      let s = seconds % 60
+      return (s >= 10 ? ""+s : "0"+s)
+    }else {
+      let m = Math.floor(seconds / 60)
+      return (m >= 10 ? ""+m : "0"+m)
+    }
+
+  }
+
   render() {
-    const { board } = this.state
+    const { board, seconds, gameIsRunning } = this.state
     const { difficulty, bomb } = this.props
     const { boardWidth, cellSize } = config[difficulty]
     const boardWidthPx = boardWidth * cellSize
     const { gameover, clear } = this.props
     let status = <span className="status"></span>
     if (gameover) {
-      status = <span id="gameover" className="status">Gameover</span>
+      status = <span id="gameover" className="status">GAME OVER!</span>
     } else if (clear) {
-      status = <span id="clear" className="status">Clear!</span>
-    } else {
+      status = <span id="clear" className="status">Cleared, you win!</span>
+    } else if (gameIsRunning) {
       status = <span id="running" className="status">Still going strong!</span>
+    } else if (!gameIsRunning) {
+      status = <span id="notstarted" className="status">Click a cell to start a game!</span>
     }
     return (
       <div style={{ width: "100%" }}>
@@ -222,10 +263,25 @@ class SingleplayerGame extends Component {
           history={this.props.history}
           origin="singleplayer"
         />
-        
+
         <div>
           <h1>Minesweeper Singleplayer</h1>
-          <p>{status}</p>
+          <h2>{status}</h2>
+          <div className="clock">
+            <div className="clockWrapper">
+              <div className="minutes">
+                <div className="first">
+                 <div className="number">{this.formatClockValue(false)}</div>
+                </div>
+              </div>
+              <div className="tick">:</div>
+              <div className="seconds">
+                <div className="first">
+                  <div className="number">{this.formatClockValue(true)}</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <Game
             board={board}

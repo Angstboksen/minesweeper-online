@@ -1,124 +1,128 @@
-h1,
-h2,
-h5 {
-    text-align: center;
-}
-
-#game {
-    margin: 0 auto;
-    width: 320px;
-}
-
-#menu {
-    margin: 0 auto;
-    clear: both;
-    width: 350px;
-    height: 33px;
-    line-height: 33px;
-    margin-bottom: 10px;
-}
-
-#restart {
-    float: right;
-    padding: 1px 15px;
-    background-color: gray;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-#restart:hover {
-    opacity: .8;
-}
-
-#bomb {
-    height: 33px;
-    line-height: 33px;
-    margin-right: 5px;
-}
-
-.status {
-    height: 33px;
-    line-height: 33px;
-    font-weight: bold;
-}
-
-#gameover {
-    color: red;
-}
-
-#running {
-    color: blue;
-}
-
-#notstarted {
-    color: cyan;
-}
-
-#clear {
-    color: green;
-}
-
-.clock {
-    height: 10vh;
-    color: black;
-    font-size: 10vh;
-    font-family: sans-serif;
-    line-height: 10.4vh;
-    display: flex;
-    position: relative;
-    /*background: green;*/
-    overflow: hidden;
-}
-
-.clockWrapper {
-    margin: 0 auto;
-}
-
-.clock::before,
-.clock::after {
-    content: '';
-    width: 7ch;
-    height: 3vh;
-    background: linear-gradient(to top, transparent, white);
-    position: absolute;
-    z-index: 2;
-}
-
-.clock::after {
-    bottom: 0;
-    background: linear-gradient(to bottom, transparent, white);
-}
-
-.clock>div {
-    display: flex;
-}
-
-.tick {
-    line-height: 9vh;
-}
-
-.tick-hidden {
-    opacity: 0;
-}
-
-.millis {
-    line-height: 13vh;
-    font-size: 5vh;
-}
-
-.move {
-    animation: move linear 1s infinite;
-}
-
-@keyframes move {
-    from {
-        transform: translateY(0vh);
+    h1 {
+        margin-top: 5px !important;
+        text-decoration: underline;
     }
-    to {
-        transform: translateY(-10vh);
+    
+    h1,
+    h2,
+    h5 {
+        text-align: center;
     }
-}
+    
+    #game {
+        margin: 0 auto;
+        display: block;
+        width: 320px;
+    }
+    
+    #menu {
+        margin: 0 auto;
+        clear: both;
+        width: 350px;
+        height: 33px;
+        line-height: 33px;
+        margin-bottom: 10px;
+    }
+    
+    #restart {
+        float: right;
+        padding: 1px 15px;
+        background-color: red;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    
+    #restart:hover {
+        opacity: .8;
+    }
+    
+    #bomb {
+        height: 33px;
+        line-height: 33px;
+        margin-right: 5px;
+    }
+    
+    .status {
+        height: 33px;
+        line-height: 33px;
+        font-weight: bold;
+    }
+    
+    #gameover {
+        color: red;
+    }
+    
+    #running {
+        color: blue;
+    }
+    
+    #notstarted {
+        color: rgb(100, 100, 155);
+    }
+    
+    #clear {
+        color: green;
+    }
+    
+    .clock {
+        height: 10vh;
+        color: black;
+        font-size: 10vh;
+        font-family: sans-serif;
+        line-height: 10.4vh;
+        display: flex;
+        position: relative;
+        /*background: green;*/
+        overflow: hidden;
+    }
+    
+    .clockWrapper {
+        margin: 0 auto;
+    }
+    
+    .clock::before,
+    .clock::after {
+        content: '';
+        width: 7ch;
+        height: 3vh;
+        position: absolute;
+        z-index: 2;
+    }
+    
+    .clock::after {
+        bottom: 0;
+    }
+    
+    .clock>div {
+        display: flex;
+    }
+    
+    .tick {
+        line-height: 9vh;
+    }
+    
+    .tick-hidden {
+        opacity: 0;
+    }
+    
+    .millis {
+        line-height: 13vh;
+        font-size: 5vh;
+    }
+    
+    .move {
+        animation: move linear 1s infinite;
+    }
+    
+    @keyframes move {
+        from {
+            transform: translateY(0vh);
+        }
+        to {
+            transform: translateY(-10vh);
+        }
+    }

@@ -4,3 +4,10 @@ export const DEFAULT_WRAPPER_STATE = {
     userimageurl: undefined,
     isSignedIn: false
 }
+export const DEFAULT_EMPTY_HIGHSCORES = {
+    "easy": [],
+    "normal": [],
+    "hard": [],
+    "veryHard": [],
+    "maniac": [],
+}

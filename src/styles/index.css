@@ -1,7 +1,19 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    font-family: "Verdana", "Helvetica Neue", Arial, sans-serif !important;
+}
+
+body>#root>div {
+    height: 100vh;
+}
+
+h3 {
+    text-decoration: underline;
+}
+
+#root {
+    background: rgb(240, 240, 240);
 }
 
 a {
@@ -20,4 +32,14 @@ a:hover {
 
 #root {
     display: flex;
+}
+
+#gamehighscorewrapper {
+    text-align: center !important;
+}
+
+#highscoreroot {
+    margin: 20px auto;
+    display: inline-block !important;
+    width: 50vh;
 }

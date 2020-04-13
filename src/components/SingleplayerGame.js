@@ -6,6 +6,10 @@ import '../styles/Game.css'
 import { withRouter } from 'react-router-dom'
 import Game from './Game'
 import Header from './Header'
+import { GiFireBomb } from "react-icons/gi"
+import { changeDifficulty } from '../actions'
+import HighscoreList from './HighscoreList'
+import { DEFAULT_EMPTY_HIGHSCORES } from '../constants'
 
 class SingleplayerGame extends Component {
 
@@ -13,7 +17,7 @@ class SingleplayerGame extends Component {
   constructor(props) {
     super(props)
     const { difficulty } = this.props
-    this.state = { board: this._initBoard(difficulty), hundreds: 0 }
+    this.state = { board: this._initBoard(difficulty), hundreds: 0, highscores: DEFAULT_EMPTY_HIGHSCORES }
     this.handleClick = this.handleClick.bind(this)
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
@@ -143,6 +147,7 @@ class SingleplayerGame extends Component {
       }
       if (this._isClear(board)) {
         this._stopTimer()
+        this._addToHighScoreList(this.state.hundreds, this.props.difficulty)
         this.props.dispatch(clear())
       }
 
@@ -164,22 +169,19 @@ class SingleplayerGame extends Component {
 
   _isClear(board) {
     let openCount = 0
-    let flagCount = 0
     const { difficulty } = this.props
-    const { boardWidth, boardHeight } = config[difficulty]
+    const { boardWidth, boardHeight, bombNum } = config[difficulty]
     board.forEach((row, i) => {
       row.forEach((cell, i) => {
         if (cell.open) {
           openCount++
-        } else if (cell.flagged) {
-          flagCount++
         }
       })
     })
     if (openCount === 1) {
       this._startTimer()
     }
-    return openCount === (boardWidth * boardHeight - flagCount)
+    return openCount === (boardWidth * boardHeight - bombNum)
   }
 
   _toggleFlag(x, y) {
@@ -229,23 +231,40 @@ class SingleplayerGame extends Component {
     const { hundreds } = this.state
     switch (type) {
       case "minutes":
-        let m = Math.floor((hundreds / 6000)) 
+        let m = Math.floor((hundreds / 6000))
         return (m >= 10 ? "" + m : "0" + m)
       case "seconds":
         let s = Math.floor(hundreds / 100) % 60
         return (s >= 10 ? "" + s : "0" + s)
       case "hundreds":
         let mi = hundreds.toString()
-        mi = mi.substring(mi.length-2)
+        mi = mi.substring(mi.length - 2)
         return mi
       default:
         return 0
     }
   }
 
+  _addToHighScoreList = (time, difficulty) => {
+    this.setState(prevState => {
+      let highscores = Object.assign({}, prevState.highscores)
+      highscores[difficulty] = [...highscores[difficulty], time].sort(function (a, b) {
+        return a - b;
+      })
+      return { highscores }
+    })
+  }
+
+
+  changeDifficulty(e) {
+    const difficulty = e.target.value
+    this.props.dispatch(changeDifficulty(difficulty))
+    this.updateBoard(difficulty)
+  }
+
   render() {
     const { board, gameIsRunning } = this.state
-    const { difficulty, bomb } = this.props
+    const { difficulty } = this.props
     const { boardWidth, cellSize } = config[difficulty]
     const boardWidthPx = boardWidth * cellSize
     const { gameover, clear } = this.props
@@ -295,20 +314,32 @@ class SingleplayerGame extends Component {
               </div>
             </div>
           </div>
-
-          <Game
-            board={board}
-            cellSize={cellSize}
-            difficulty={difficulty}
-            bomb={bomb}
-            boardWidthPx={boardWidthPx}
-            changeDifficulty={this.changeDifficulty}
-            dispatch={this.props.dispatch}
-            updateBoard={this.updateBoard}
-            handleClick={this.handleClick}
-            handleClickCell={this.handleClickCell}
-            handleRightClickCell={this.handleRightClickCell}
-            handleDoubleClickCell={this.handleDoubleClickCell} />
+          <div id="menu">
+            <button onClick={this.handleClick} id="restart">Restart</button>
+            <select value={this.props.difficulty} onChange={(e) => this.changeDifficulty(e)} style={{ marginRight: 5 }}>
+              <option value={'easy'} key={'easy'}>Easy</option>
+              <option value={'normal'} key={'normal'}>Normal</option>
+              <option value={'hard'} key={'hard'}>Hard</option>
+              <option value={'veryHard'} key={'veryHard'}>Very Hard</option>
+              <option value={'maniac'} key={'maniac'}>Maniac</option>
+            </select>
+            <span id="bomb"><GiFireBomb style={{ marginTop: -3 }} /> {this.props.bomb}</span>
+          </div>
+          <div id="gamehighscorewrapper">
+            <Game
+              board={board}
+              cellSize={cellSize}
+              difficulty={difficulty}
+              boardWidthPx={boardWidthPx}
+              handleClick={this.handleClick}
+              handleClickCell={this.handleClickCell}
+              handleRightClickCell={this.handleRightClickCell}
+              handleDoubleClickCell={this.handleDoubleClickCell} />
+            <HighscoreList
+              highscores={this.state.highscores[difficulty]}
+              difficulty={difficulty}
+            />
+          </div>
         </div>
       </div>
     )

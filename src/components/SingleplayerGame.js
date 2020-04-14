@@ -279,7 +279,7 @@ class SingleplayerGame extends Component {
       status = <span id="notstarted" className="status">Click a cell to start a game!</span>
     }
     return (
-      <div style={{ width: "100%" }}>
+      <div id="singleplayerdiv">
         <Header
           credentials={this.props.credentials}
           _resetState={this.props._resetState}

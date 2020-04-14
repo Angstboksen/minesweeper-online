@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { GoogleLogin, GoogleLogout } from 'react-google-login'
-import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap'
+import { GoogleLogout } from 'react-google-login'
+import { Navbar, Nav, Form, FormControl, Button, Image } from 'react-bootstrap'
 
 export class Header extends Component {
 
@@ -8,11 +8,7 @@ export class Header extends Component {
         this.props._resetState()
         this.props.history.push("/")
     }
-
-    _login = (response) => {
-        this.props._login(response)
-    }
-
+    
     getNavLinks = () => {
         switch (this.props.origin) {
             case "home":
@@ -48,7 +44,7 @@ export class Header extends Component {
     }
 
     getContent = () => {
-        const { isSignedIn } = this.props.credentials
+        const { isSignedIn, userimageurl } = this.props.credentials
         return (
             <>
                 <Navbar expand="lg" bg="dark" variant="dark">
@@ -56,27 +52,18 @@ export class Header extends Component {
                     {this.getNavLinks()}
                     {isSignedIn &&
                         <>
-                            <Form inline style={{marginRight: "20px"}}>
+                            <Form inline style={{ marginRight: "20px" }}>
                                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                                 <Button variant="outline-info">Search</Button>
                             </Form>
-                            <GoogleLogout
-                                clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
-                                buttonText="Logout"
-                                onLogoutSuccess={this._logout}
-                            />
-                        </>
-                    }
-                    {!isSignedIn &&
-                        <>
-                            <GoogleLogin
-                                clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
-                                buttonText="Login with Google"
-                                onSuccess={this._login}
-                                onFailure={this.props._loginerror}
-                                cookiePolicy={'single_host_origin'}
-                                isSignedIn={true}
-                            />
+                            <span>
+                                <Image id="headerpicture" src={userimageurl} roundedCircle />
+                                <GoogleLogout
+                                    clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
+                                    buttonText="Logout"
+                                    onLogoutSuccess={this._logout}
+                                />
+                            </span>
                         </>
                     }
                 </Navbar>

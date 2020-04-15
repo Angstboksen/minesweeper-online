@@ -9,7 +9,6 @@ import Header from './Header'
 import { GiFireBomb } from "react-icons/gi"
 import { changeDifficulty } from '../actions'
 import HighscoreList from './HighscoreList'
-import { DEFAULT_EMPTY_HIGHSCORES } from '../constants'
 
 class SingleplayerGame extends Component {
 
@@ -17,7 +16,7 @@ class SingleplayerGame extends Component {
   constructor(props) {
     super(props)
     const { difficulty } = this.props
-    this.state = { board: this._initBoard(difficulty), hundreds: 0, highscores: DEFAULT_EMPTY_HIGHSCORES }
+    this.state = { board: this._initBoard(difficulty), hundreds: 0}
     this.handleClick = this.handleClick.bind(this)
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
@@ -144,10 +143,11 @@ class SingleplayerGame extends Component {
       if (board[x][y].bomb) {
         this._stopTimer()
         this.showAllBombs(board)
+        this.props._saveGame(this.state.hundreds, this.props.difficulty, false)
       }
       if (this._isClear(board)) {
         this._stopTimer()
-        this._addToHighScoreList(this.state.hundreds, this.props.difficulty)
+        this.props._saveGame(this.state.hundreds, this.props.difficulty, true)
         this.props.dispatch(clear())
       }
 
@@ -193,7 +193,6 @@ class SingleplayerGame extends Component {
   }
 
   updateBoard = (difficulty) => {
-    console.log(difficulty)
     this.setState({ board: this._initBoard(difficulty) })
   }
 
@@ -245,17 +244,6 @@ class SingleplayerGame extends Component {
     }
   }
 
-  _addToHighScoreList = (time, difficulty) => {
-    this.setState(prevState => {
-      let highscores = Object.assign({}, prevState.highscores)
-      highscores[difficulty] = [...highscores[difficulty], time].sort(function (a, b) {
-        return a - b;
-      })
-      return { highscores }
-    })
-  }
-
-
   changeDifficulty(e) {
     const difficulty = e.target.value
     this.props.dispatch(changeDifficulty(difficulty))
@@ -263,8 +251,8 @@ class SingleplayerGame extends Component {
   }
 
   render() {
-    const { board, gameIsRunning } = this.state
-    const { difficulty } = this.props
+    const { board, gameIsRunning} = this.state
+    const { difficulty, credentials } = this.props
     const { boardWidth, cellSize } = config[difficulty]
     const boardWidthPx = boardWidth * cellSize
     const { gameover, clear } = this.props
@@ -336,7 +324,7 @@ class SingleplayerGame extends Component {
               handleRightClickCell={this.handleRightClickCell}
               handleDoubleClickCell={this.handleDoubleClickCell} />
             <HighscoreList
-              highscores={this.state.highscores[difficulty]}
+              highscores={credentials.highscores[difficulty]}
               difficulty={difficulty}
             />
           </div>

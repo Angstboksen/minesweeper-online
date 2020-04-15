@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { ListGroup, ListGroupItem } from 'react-bootstrap'
+import {DIFF_COLORS,} from '../constants'
 
 export class HighscoreList extends Component {
 
@@ -15,43 +16,21 @@ export class HighscoreList extends Component {
             return "success"
         }
     }
-
-    showDifficulty = () => {
-        const {difficulty} = this.props
-        let color = "green"
-        switch (difficulty) {
-            case "normal":
-                color = "orange"
-                break;
-            case "hard":
-                color = "tomato"
-                break;
-            case "veryHard":
-                color = "	orangered"
-                break;
-            case "maniac":
-                color = "darkslategray"
-                break;
-            default:
-                color = "green"
-                break;
-
-        }
-        return <p style={{color: color}}>{difficulty.toUpperCase()}</p>
-    }
-
+    
     render() {
+        const {difficulty} = this.props
         return (
             <div id="highscoreroot">
                 <h3>Personal highscores!</h3>
-                {this.showDifficulty()}
+                <p style={{ color: DIFF_COLORS[difficulty] }}>{difficulty.toUpperCase()}</p>
                 {this.props.highscores.length === 0 && <p>Get to gaming then!</p>}
-                <ListGroup>{this.props.highscores.slice(0, 10).map((score, i) => {
+                <ListGroup>{this.props.highscores.slice(0, 10).map((object, i) => {
+                    let score = object.game_time
                     let min = Math.floor(score / 6000)
-                    let sec = (score / 100) % 60
+                    let sec = ((score / 100) % 60).toFixed(2)
                     return min > 0 ?
-                        <ListGroupItem key={i} variant={this.getVariant(i)}>{min} minutes {sec} seconds</ListGroupItem> :
-                        <ListGroupItem key={i} variant={this.getVariant(i)}>{sec} seconds</ListGroupItem>
+                        <ListGroupItem key={i} variant={this.getVariant(i)}><p className="highscorenumber">{i + 1}</p> : {min} minutes {sec} seconds</ListGroupItem> :
+                        <ListGroupItem key={i} variant={this.getVariant(i)}><p className="highscorenumber">{i + 1}</p> : {sec} seconds</ListGroupItem>
                 })}
                 </ListGroup>
             </div>

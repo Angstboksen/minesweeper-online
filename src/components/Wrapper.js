@@ -4,29 +4,109 @@ import SingleplayerGame from './SingleplayerGame'
 import Home from './Home'
 import MultiplayerGame from './MultiplayerGame';
 import { DEFAULT_WRAPPER_STATE } from '../constants'
+import axios from 'axios'
+import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
+import { DEFAULT_EMPTY_HIGHSCORES } from '../constants'
 
 
 class Wrapper extends Component {
 
-    state = DEFAULT_WRAPPER_STATE
+    constructor(props) {
+        super(props)
+        if (this.state === undefined) {
+            this.state = DEFAULT_WRAPPER_STATE
+        }
+    }
 
-    _login = (response) => {
-        const { name, email, imageUrl } = response.profileObj
-        this.setState({
-            username: name,
-            useremail: email,
-            userimageurl: imageUrl,
-            isSignedIn: true
-        })
+    _login = async (response) => {
+        const { googleId, givenName, familyName, email, imageUrl } = response.profileObj
+        const res = await axios(REQUEST_FUNCTIONS.GET_TOKEN(googleId, googleId))
+            .catch(async () => {
+                const user = await axios(REQUEST_FUNCTIONS.POST_USER(googleId, givenName, familyName, email))
+                const token = await axios(REQUEST_FUNCTIONS.GET_TOKEN(googleId, googleId))
+                this.setState({
+                    isSignedIn: true,
+                    username: givenName,
+                    useremail: email,
+                    userimageurl: imageUrl,
+                    token: token
+                }, () => {
+                    this.getHighscores()
+                    console.clear()
+                })
+                return
+            })
+
+        if (res !== undefined && res.status === 200) {
+            this.setState({
+                isSignedIn: true,
+                username: givenName,
+                useremail: email,
+                userimageurl: imageUrl,
+                token: res.data.token
+            }, () => {
+                this.getHighscores()
+                console.clear()
+            })
+        }
+
     }
 
     _loginerror = (response) => {
-        console.log(response)
+        console.log("Error occured")
     }
 
     _resetState = () => {
         this.setState(DEFAULT_WRAPPER_STATE)
     }
+
+    getHighscores = async () => {
+        const token = this.state.token
+        if (token === undefined) {
+            return DEFAULT_EMPTY_HIGHSCORES
+        }
+        const response = await axios(REQUEST_FUNCTIONS.GET_HIGHSCORELIST(token))
+        const highscores = response.data.sort(function (a, b) {
+            return a.game_time - b.game_time;
+        })
+        const obj = {
+            "easy": highscores,
+            "normal": highscores,
+            "hard": highscores,
+            "veryHard": highscores,
+            "maniac": highscores,
+            'loaded': true
+        }
+        return this.setState({ highscores: obj })
+    }
+
+    _saveGame = async (time, difficulty, game_won) => {
+        let placements = null
+        let placement = -1
+        if (game_won) {
+            const obj = {
+                'game_time': time,
+                'game_won': game_won
+            }
+            this.setState(prevState => {
+                let highscores = Object.assign({}, prevState.highscores)
+                highscores[difficulty] = [...highscores[difficulty], obj].sort(function (a, b) {
+                    return a.game_time - b.game_time;
+                })
+                return { highscores }
+            }, () => {
+                placements = this.state.highscores[difficulty]
+                for (let i = 0; i < placements.length; i++) {
+                    if (placements[i].game_time === time) {
+                        placement = i + 1
+                    }
+                }
+            })
+        }
+        await axios(REQUEST_FUNCTIONS.POST_GAME(this.state.token, time, game_won))
+        this.setState({ latestHighscore: placement })
+    }
+
 
     render() {
         return (
@@ -45,7 +125,8 @@ class Wrapper extends Component {
                                 credentials={this.state}
                                 _login={this._login}
                                 _loginerror={this._loginerror}
-                                _resetState={this._resetState} />
+                                _resetState={this._resetState}
+                                _saveGame={this._saveGame} />
                         </Route>
                         <Route path="/multiplayer">
                             <MultiplayerGame

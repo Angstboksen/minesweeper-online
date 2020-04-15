@@ -38,12 +38,14 @@ class Home extends Component {
     }
 
     render() {
+        const { credentials, _resetState, _login, history } = this.props
         return (
             <div style={{ width: "100%" }}>
                 <Header
-                    credentials={this.props.credentials}
-                    _resetState={this.props._resetState}
-                    history={this.props.history}
+                    credentials={credentials}
+                    _resetState={_resetState}
+                    _login={_login}
+                    history={history}
                     origin="home" />
                 <div>
                     <h1>Home page</h1>

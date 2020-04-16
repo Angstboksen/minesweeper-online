@@ -248,6 +248,7 @@ class SingleplayerGame extends Component {
 
   changeDifficulty(e) {
     const difficulty = e.target.value
+    this.props._updateDifficulty(difficulty)
     this.props.dispatch(changeDifficulty(difficulty))
     this.updateBoard(difficulty)
   }

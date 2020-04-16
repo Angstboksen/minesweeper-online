@@ -60,21 +60,25 @@ class Wrapper extends Component {
         this.setState(DEFAULT_WRAPPER_STATE)
     }
 
+    sortHighscores = (highscores) => {
+        return highscores.sort(function (a, b) {
+            return a.game_time - b.game_time;
+        })
+    }
+
     getHighscores = async () => {
-        const token = this.state.token
+        const {token} = this.state
         if (token === undefined) {
             return DEFAULT_EMPTY_HIGHSCORES
         }
         const response = await axios(REQUEST_FUNCTIONS.GET_HIGHSCORELIST(token))
-        const highscores = response.data.sort(function (a, b) {
-            return a.game_time - b.game_time;
-        })
+        const highscores = response.data
         const obj = {
-            "easy": highscores,
-            "normal": highscores,
-            "hard": highscores,
-            "veryHard": highscores,
-            "maniac": highscores,
+            "easy": this.sortHighscores(highscores.filter(h => h.difficulty === 'easy')),
+            "normal": this.sortHighscores(highscores.filter(h => h.difficulty === 'normal')),
+            "hard": this.sortHighscores(highscores.filter(h => h.difficulty === 'hard')),
+            "veryHard": this.sortHighscores(highscores.filter(h => h.difficulty === 'veryHard')),
+            "maniac": this.sortHighscores(highscores.filter(h => h.difficulty === 'maniac')),
             'loaded': true
         }
         return this.setState({ highscores: obj })
@@ -86,6 +90,7 @@ class Wrapper extends Component {
         if (game_won) {
             const obj = {
                 'game_time': time,
+                'difficulty': difficulty,
                 'game_won': game_won
             }
             this.setState(prevState => {
@@ -104,11 +109,14 @@ class Wrapper extends Component {
             })
         }
         if (this.state.isSignedIn) {
-            await axios(REQUEST_FUNCTIONS.POST_GAME(this.state.token, time, game_won))
+            await axios(REQUEST_FUNCTIONS.POST_GAME(this.state.token, time, game_won, difficulty))
         }
         this.setState({ latestHighscore: placement })
     }
 
+    _updateDifficulty = (difficulty) => {
+        this.setState({difficulty : difficulty})
+    }
 
     render() {
         return (
@@ -128,7 +136,8 @@ class Wrapper extends Component {
                                 _login={this._login}
                                 _loginerror={this._loginerror}
                                 _resetState={this._resetState}
-                                _saveGame={this._saveGame} />
+                                _saveGame={this._saveGame}
+                                _updateDifficulty={this._updateDifficulty} />
                         </Route>
                         <Route path="/multiplayer">
                             <MultiplayerGame

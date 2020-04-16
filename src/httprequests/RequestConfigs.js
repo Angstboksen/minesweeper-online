@@ -72,10 +72,11 @@ function POST_NEW_USER(username, firstname, lastname, email){
 }
 
 //Posting new game
-function POST_USER_GAME(token, game_time, game_won) {
+function POST_USER_GAME(token, game_time, game_won, difficulty) {
   const data = {
     'game_time' : game_time,
-    'game_won' : game_won
+    'game_won' : game_won,
+    'difficulty': difficulty
   }
   const options = {
     method: 'POST',

@@ -331,6 +331,14 @@ class SingleplayerGame extends Component {
               highscoresloaded={credentials.highscores.loaded}
               credentials={this.props.credentials}
               difficulty={difficulty}
+              isGlobalHighscoreList={false}
+            />
+            <HighscoreList
+              highscores={credentials.globalhighscores[difficulty]}
+              highscoresloaded={credentials.globalhighscores.loaded}
+              credentials={this.props.credentials}
+              difficulty={difficulty}
+              isGlobalHighscoreList={true}
             />
           </div>
         </div>

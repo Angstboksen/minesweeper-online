@@ -18,20 +18,23 @@ export class HighscoreList extends Component {
     }
 
     render() {
-        const { difficulty, highscores, credentials, highscoresloaded } = this.props
+        const { difficulty, highscores, credentials, highscoresloaded, isGlobalHighscoreList } = this.props
+        const isGlobal = isGlobalHighscoreList
         return credentials.isSignedIn ? (<div id="highscoreroot">
-            <h3>Personal highscores!</h3>
+            {isGlobalHighscoreList ?
+                <h3>Leaderbords for <span style={{ color: DIFF_COLORS[difficulty] }}>{difficulty.toUpperCase()}</span></h3> :
+                <h3>Personal highscores!</h3>}
             <p style={{ color: DIFF_COLORS[difficulty] }}>{difficulty.toUpperCase()}</p>
             {(!highscoresloaded) ? <Spinner animation="border" variant="dark" /> : null}
-            {(highscores.length === 0) ? <p>No highscores for <span style={{ color: DIFF_COLORS[difficulty] }}>{difficulty.toUpperCase()}
+            {(highscores.length === 0) ? <p>No {isGlobal ? "leaderbords" : "highscores"} for <span style={{ color: DIFF_COLORS[difficulty] }}>{difficulty.toUpperCase()}
             </span>  difficulty stored!</p> : null}
             <ListGroup>{highscores.slice(0, 10).map((object, i) => {
                 let score = object.game_time
                 let min = Math.floor(score / 6000)
                 let sec = ((score / 100) % 60).toFixed(2)
                 return min > 0 ?
-                    <ListGroupItem key={i} variant={this.getVariant(i)}><p className="highscorenumber">{i + 1}</p> : {min} minutes {sec} seconds</ListGroupItem> :
-                    <ListGroupItem key={i} variant={this.getVariant(i)}><p className="highscorenumber">{i + 1}</p> : {sec} seconds</ListGroupItem>
+            <ListGroupItem key={i} variant={this.getVariant(i)}><p className="highscorenumber">{i + 1}</p> : {min} minutes {sec} seconds {isGlobal ?  <p style={{display : 'inline'}}><b>({object.user_name})</b></p> : null}</ListGroupItem> :
+                    <ListGroupItem key={i} variant={this.getVariant(i)}><p className="highscorenumber">{i + 1}</p> : {sec} seconds {isGlobal ? <p style={{display : 'inline'}}><b>({object.user_name})</b></p> : null}</ListGroupItem>
             })}
             </ListGroup>
         </div>) : null

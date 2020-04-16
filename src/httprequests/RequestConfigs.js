@@ -49,7 +49,16 @@ function GET_USER_HIGHSCORELIST(token) {
     headers: { 'Authorization': 'Token ' + token, 'content-type': 'json' },
     url: FORMAT_URL('highscorelist/')
   }
-  console.log(options)
+  return options
+}
+
+//Getting all the highscores for global list
+function GET_GLOBAL_HIGHSCORES() {
+  const options = {
+    method: 'GET',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    url: FORMAT_URL('highscorelist/')
+  }
   return options
 }
 
@@ -94,7 +103,8 @@ const REQUEST_FUNCTIONS = {
   GET_GAMES : GET_USER_GAMES,
   GET_HIGHSCORELIST : GET_USER_HIGHSCORELIST,
   POST_USER : POST_NEW_USER,
-  POST_GAME : POST_USER_GAME
+  POST_GAME : POST_USER_GAME,
+  GET_GLOBAL_HIGHSCORES : GET_GLOBAL_HIGHSCORES
 }
 
 

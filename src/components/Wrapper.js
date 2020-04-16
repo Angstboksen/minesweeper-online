@@ -35,7 +35,6 @@ class Wrapper extends Component {
                     this.getHighscores()
                     //console.clear()
                 })
-                return
             })
 
         if (res !== undefined && res.status === 200) {
@@ -47,10 +46,10 @@ class Wrapper extends Component {
                 token: res.data.token
             }, () => {
                 this.getHighscores()
+                this.getGlobalHighscores()
                 //console.clear()
             })
         }
-
     }
 
     _loginerror = (response) => {
@@ -85,6 +84,20 @@ class Wrapper extends Component {
         return this.setState({ highscores: obj })
     }
 
+    getGlobalHighscores = async () => {
+        const response = await axios(REQUEST_FUNCTIONS.GET_GLOBAL_HIGHSCORES())
+        const highscores = response.data
+        const obj = {
+            "easy": this.sortHighscores(highscores.filter(h => h.difficulty === 'easy')),
+            "normal": this.sortHighscores(highscores.filter(h => h.difficulty === 'normal')),
+            "hard": this.sortHighscores(highscores.filter(h => h.difficulty === 'hard')),
+            "veryHard": this.sortHighscores(highscores.filter(h => h.difficulty === 'veryHard')),
+            "maniac": this.sortHighscores(highscores.filter(h => h.difficulty === 'maniac')),
+            'loaded': true
+        }
+        this.setState({globalhighscores : obj})
+    }
+
     _saveGame = async (time, difficulty, game_won) => {
         let placements = null
         let placement = -1
@@ -111,6 +124,7 @@ class Wrapper extends Component {
         }
         if (this.state.isSignedIn) {
             await axios(REQUEST_FUNCTIONS.POST_GAME(this.state.token, time, game_won, difficulty))
+            this.getGlobalHighscores()
         }
         this.setState({ latestHighscore: placement })
     }

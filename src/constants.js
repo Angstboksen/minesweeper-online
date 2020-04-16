@@ -16,6 +16,7 @@ export const DEFAULT_WRAPPER_STATE = {
     isSignedIn: false,
     loaded : false,
     highscores : DEFAULT_EMPTY_HIGHSCORES,
+    globalhighscores : DEFAULT_EMPTY_HIGHSCORES,
     difficulty: 'easy'
 }
 

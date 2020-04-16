@@ -5,6 +5,7 @@ export const DEFAULT_EMPTY_HIGHSCORES = {
     "hard": [],
     "veryHard": [],
     "maniac": [],
+    'loaded': false
 }
 
 export const DEFAULT_WRAPPER_STATE = {

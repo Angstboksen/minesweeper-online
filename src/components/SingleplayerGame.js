@@ -16,7 +16,7 @@ class SingleplayerGame extends Component {
   constructor(props) {
     super(props)
     const { difficulty } = this.props
-    this.state = { board: this._initBoard(difficulty), hundreds: 0}
+    this.state = { board: this._initBoard(difficulty), hundreds: 0 }
     this.handleClick = this.handleClick.bind(this)
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
@@ -143,7 +143,9 @@ class SingleplayerGame extends Component {
       if (board[x][y].bomb) {
         this._stopTimer()
         this.showAllBombs(board)
-        this.props._saveGame(this.state.hundreds, this.props.difficulty, false)
+        if (this.state.hundreds > 0) {
+          this.props._saveGame(this.state.hundreds, this.props.difficulty, false)
+        }
       }
       if (this._isClear(board)) {
         this._stopTimer()
@@ -251,7 +253,7 @@ class SingleplayerGame extends Component {
   }
 
   render() {
-    const { board, gameIsRunning} = this.state
+    const { board, gameIsRunning } = this.state
     const { difficulty, credentials } = this.props
     const { boardWidth, cellSize } = config[difficulty]
     const boardWidthPx = boardWidth * cellSize
@@ -325,6 +327,8 @@ class SingleplayerGame extends Component {
               handleDoubleClickCell={this.handleDoubleClickCell} />
             <HighscoreList
               highscores={credentials.highscores[difficulty]}
+              highscoresloaded={credentials.highscores.loaded}
+              credentials={this.props.credentials}
               difficulty={difficulty}
             />
           </div>

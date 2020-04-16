@@ -103,7 +103,9 @@ class Wrapper extends Component {
                 }
             })
         }
-        await axios(REQUEST_FUNCTIONS.POST_GAME(this.state.token, time, game_won))
+        if (this.state.isSignedIn) {
+            await axios(REQUEST_FUNCTIONS.POST_GAME(this.state.token, time, game_won))
+        }
         this.setState({ latestHighscore: placement })
     }
 

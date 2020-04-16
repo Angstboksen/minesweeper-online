@@ -23,6 +23,7 @@ class Wrapper extends Component {
         const res = await axios(REQUEST_FUNCTIONS.GET_TOKEN(googleId, googleId))
             .catch(async () => {
                 const user = await axios(REQUEST_FUNCTIONS.POST_USER(googleId, givenName, familyName, email))
+                console.log(user)
                 const token = await axios(REQUEST_FUNCTIONS.GET_TOKEN(googleId, googleId))
                 this.setState({
                     isSignedIn: true,
@@ -32,7 +33,7 @@ class Wrapper extends Component {
                     token: token
                 }, () => {
                     this.getHighscores()
-                    console.clear()
+                    //console.clear()
                 })
                 return
             })
@@ -46,7 +47,7 @@ class Wrapper extends Component {
                 token: res.data.token
             }, () => {
                 this.getHighscores()
-                console.clear()
+                //console.clear()
             })
         }
 

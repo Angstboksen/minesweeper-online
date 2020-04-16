@@ -49,6 +49,7 @@ function GET_USER_HIGHSCORELIST(token) {
     headers: { 'Authorization': 'Token ' + token, 'content-type': 'json' },
     url: FORMAT_URL('highscorelist/')
   }
+  console.log(options)
   return options
 }
 

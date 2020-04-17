@@ -53,7 +53,7 @@ class Wrapper extends Component {
     }
 
     _loginerror = (response) => {
-        console.log("Error occured")
+        console.log(response)
     }
 
     _resetState = () => {

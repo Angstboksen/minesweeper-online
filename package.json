@@ -1,39 +1,40 @@
 {
-  "name": "react-minesweeper",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "axios": "^0.19.2",
-    "bootstrap": "^4.4.1",
-    "react": "^16.0.0",
-    "react-bootstrap": "^1.0.0",
-    "react-dom": "^16.0.0",
-    "react-google-login": "^5.1.3",
-    "react-icons": "^3.9.0",
-    "react-redux": "^7.2.0",
-    "react-router-dom": "^5.1.2",
-    "redux": "^4.0.5",
-    "redux-logger": "^3.0.6"
-  },
-  "devDependencies": {
-    "react-scripts": "3.4.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "name": "react-minesweeper",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "axios": "^0.19.2",
+        "bootstrap": "^4.4.1",
+        "react": "^16.0.0",
+        "react-bootstrap": "^1.0.0",
+        "react-dom": "^16.0.0",
+        "react-google-login": "^5.1.3",
+        "react-icons": "^3.9.0",
+        "react-redux": "^7.2.0",
+        "react-router-dom": "^5.1.2",
+        "redux": "^4.0.5",
+        "redux-logger": "^3.0.6"
+    },
+    "devDependencies": {
+        "react-scripts": "3.4.1"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject",
+        "deploy-production": "react-scripts build && scp -r ./build/* minesweeper@209.97.142.248:/var/www/minesweeper/html"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
 }

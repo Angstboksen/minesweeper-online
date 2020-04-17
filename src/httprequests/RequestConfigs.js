@@ -1,7 +1,8 @@
 import __MASTER_TOKEN__ from './Mastertoken.js'
 
 
-const BASE_URL = 'http://localhost:8000/'
+const BASE_URL = 'http://85.164.49.124:8000/'
+//const BASE_URL = 'http://localhost:8000/'
 
 const FORMAT_URL = (path) => {
   return BASE_URL + path

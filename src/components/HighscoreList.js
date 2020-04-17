@@ -30,8 +30,8 @@ export class HighscoreList extends Component {
             </span>  difficulty stored!</p> : null}
             <ListGroup>{highscores.slice(0, 10).map((object, i) => {
                 let score = object.game_time
-                let min = Math.floor(score / 6000)
-                let sec = ((score / 100) % 60).toFixed(2)
+                let min = Math.floor(score / 60000)
+                let sec = ((score / 1000) % 60).toFixed(3)
                 return min > 0 ?
             <ListGroupItem key={i} variant={this.getVariant(i)}><p className="highscorenumber">{i + 1}</p> : {min} minutes {sec} seconds {isGlobal ?  <p style={{display : 'inline'}}><b>({object.user_name})</b></p> : null}</ListGroupItem> :
                     <ListGroupItem key={i} variant={this.getVariant(i)}><p className="highscorenumber">{i + 1}</p> : {sec} seconds {isGlobal ? <p style={{display : 'inline'}}><b>({object.user_name})</b></p> : null}</ListGroupItem>

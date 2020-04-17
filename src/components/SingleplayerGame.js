@@ -16,11 +16,12 @@ class SingleplayerGame extends Component {
   constructor(props) {
     super(props)
     const { difficulty } = this.props
-    this.state = { board: this._initBoard(difficulty), hundreds: 0 }
+    this.state = { board: this._initBoard(difficulty), millis: 0 }
     this.handleClick = this.handleClick.bind(this)
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
     this.handleDoubleClickCell = this.handleDoubleClickCell.bind(this)
+    this.clock = undefined
   }
 
   _initBoard(difficulty) {
@@ -100,12 +101,12 @@ class SingleplayerGame extends Component {
           (i === x && j === y)) {
           continue
         }
-        if(board[i][j].flagged) {
+        if (board[i][j].flagged) {
           flags++
         }
       }
     }
-    if(board[x][y].bombCount !== flags) {
+    if (board[x][y].bombCount !== flags) {
       return
     }
 
@@ -160,13 +161,13 @@ class SingleplayerGame extends Component {
       if (board[x][y].bomb) {
         this._stopTimer()
         this.showAllBombs(board)
-        if (this.state.hundreds > 0) {
-          this.props._saveGame(this.state.hundreds, this.props.difficulty, false)
+        if (this.state.millis > 0) {
+          this.props._saveGame(this.state.millis, this.props.difficulty, false)
         }
       }
       if (this._isClear(board)) {
         this._stopTimer()
-        this.props._saveGame(this.state.hundreds, this.props.difficulty, true)
+        this.props._saveGame(this.state.millis, this.props.difficulty, true)
         this.props.dispatch(clear())
       }
 
@@ -229,34 +230,35 @@ class SingleplayerGame extends Component {
   }
 
   _startTimer = async () => {
-    this.setState({ gameIsRunning: true, hundreds: 0 }, async () => {
-      while (this.state.gameIsRunning) {
-        this.setState({ hundreds: this.state.hundreds += 1 })
-        await new Promise(r => setTimeout(r, 1));
-      }
-    })
+    let starttime = Date.now()
+    this.setState({ gameIsRunning: true, starttime: starttime, millis: 0 })
+    this.clock = setInterval(() => {
+      let currenttime = Date.now()
+      this.setState({ millis: currenttime - starttime })
+    }, )
   }
 
   _stopTimer = (reset = false) => {
     if (reset) {
-      this.setState({ gameIsRunning: false, hundreds: 0 })
+      this.setState({ gameIsRunning: false, millis: 0 })
     } else {
       this.setState({ gameIsRunning: false })
     }
+    clearInterval(this.clock)
   }
 
   formatClockValue = (type) => {
-    const { hundreds } = this.state
+    const { millis } = this.state
     switch (type) {
       case "minutes":
-        let m = Math.floor((hundreds / 6000))
+        let m = Math.floor((millis / 60000))
         return (m >= 10 ? "" + m : "0" + m)
       case "seconds":
-        let s = Math.floor(hundreds / 100) % 60
+        let s = Math.floor(millis / 1000) % 60
         return (s >= 10 ? "" + s : "0" + s)
-      case "hundreds":
-        let mi = hundreds.toString()
-        mi = mi.substring(mi.length - 2)
+      case "millis":
+        let mi = millis.toString()
+        mi = mi.substring(mi.length - 3)
         return mi
       default:
         return 0
@@ -315,9 +317,9 @@ class SingleplayerGame extends Component {
                 </div>
               </div>
               <div className="tick">.</div>
-              <div className="hundreds">
+              <div className="millis">
                 <div className="first">
-                  <div className="number">{this.formatClockValue("hundreds")}</div>
+                  <div className="number">{this.formatClockValue("millis")}</div>
                 </div>
               </div>
             </div>

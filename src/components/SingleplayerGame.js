@@ -88,7 +88,7 @@ class SingleplayerGame extends Component {
     if (gameover || clear) {
       return
     }
-    if (board[x][y].open || board[x][y].flagged) {
+    if (board[x][y].flagged) {
       return
     }
 

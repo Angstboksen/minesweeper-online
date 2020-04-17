@@ -16,7 +16,7 @@ class SingleplayerGame extends Component {
   constructor(props) {
     super(props)
     const { difficulty } = this.props
-    this.state = { board: this._initBoard(difficulty), millis: 0 }
+    this.state = { board: this._initBoard(difficulty), millis: 0}
     this.handleClick = this.handleClick.bind(this)
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
@@ -24,9 +24,9 @@ class SingleplayerGame extends Component {
     this.clock = undefined
   }
 
-  _initBoard(difficulty) {
+  _initBoard(difficulty, hitBomb = false, startX = 0, startY = 0) {
     this._stopTimer(true)
-    this.bombPlaces = this._initBombPlaces(difficulty)
+    this.bombPlaces = hitBomb ? this._initBombPlaces(difficulty, startX, startY) : this.bombPlaces = this._initBombPlaces(difficulty)
     const { boardWidth, boardHeight } = config[difficulty]
     const board = Array.from(
       new Array(boardWidth), () => new Array(boardHeight).fill(
@@ -39,7 +39,8 @@ class SingleplayerGame extends Component {
     return board
   }
 
-  _initBombPlaces(difficulty) {
+  _initBombPlaces(difficulty, startX = 0, startY = 0) {
+    console.log(startX + "  " + startY)
     const bombPlaces = []
     const { boardWidth, boardHeight, bombNum } = config[difficulty]
     while (bombPlaces.length < bombNum) {
@@ -51,10 +52,16 @@ class SingleplayerGame extends Component {
         const duplicated = bombPlaces.filter((place) => {
           return place.x === x && place.y === y
         }).length > 0
-        if (!duplicated) {
+        if (!duplicated ) {
           bombPlaces.push({ x: x, y: y })
         }
       }
+    }
+    if(startX !== 0 || startY !== 0) {
+      this.props.dispatch(init())
+      this.setState({ board: this._initBoard(difficulty)}, () => {
+        this._open(startX, startY)
+      })
     }
     return bombPlaces
   }
@@ -160,10 +167,12 @@ class SingleplayerGame extends Component {
       }
       if (board[x][y].bomb) {
         this._stopTimer()
-        this.showAllBombs(board)
-        if (this.state.millis > 0) {
-          this.props._saveGame(this.state.millis, this.props.difficulty, false)
+        if (this.state.millis === 0) {
+          this._initBoard(this.props.difficulty, true, x, y)
+          return
         }
+        this.showAllBombs(board)
+        this.props._saveGame(this.state.millis, this.props.difficulty, false)
       }
       if (this._isClear(board)) {
         this._stopTimer()

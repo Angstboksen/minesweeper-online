@@ -85,10 +85,27 @@ class SingleplayerGame extends Component {
     const { gameover, clear, difficulty } = this.props
     const { boardWidth, boardHeight } = config[difficulty]
     const { board } = this.state
+    let flags = 0
     if (gameover || clear) {
       return
     }
     if (board[x][y].flagged) {
+      return
+    }
+
+    for (let i = x - 1; i <= x + 1; i++) {
+      for (let j = y - 1; j <= y + 1; j++) {
+        if ((i < 0 || i >= boardWidth) ||
+          (j < 0 || j >= boardHeight) ||
+          (i === x && j === y)) {
+          continue
+        }
+        if(board[i][j].flagged) {
+          flags++
+        }
+      }
+    }
+    if(board[x][y].bombCount !== flags) {
       return
     }
 

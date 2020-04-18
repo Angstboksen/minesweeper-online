@@ -39,7 +39,7 @@ class SingleplayerGame extends Component {
     return board
   }
 
-  _initBombPlaces(difficulty, startX = 0, startY = 0) {
+  _initBombPlaces(difficulty, startX = -1, startY = -1) {
     const bombPlaces = []
     const { boardWidth, boardHeight, bombNum } = config[difficulty]
     while (bombPlaces.length < bombNum) {
@@ -56,7 +56,7 @@ class SingleplayerGame extends Component {
         }
       }
     }
-    if (startX !== 0 || startY !== 0) {
+    if (startX !== -1 || startY !== -1) {
       this.props.dispatch(init())
       this.setState({ board: this._initBoard(difficulty) }, () => {
         this._open(startX, startY)
@@ -132,11 +132,13 @@ class SingleplayerGame extends Component {
   }
 
   showAllBombs = (board) => {
-    for (let bomb of this.bombPlaces) {
-      let x = bomb.x
-      let y = bomb.y
-      if (board[x][y].bomb) {
-        board[x][y] = Object.assign({}, board[x][y], { open: true })
+    const { difficulty } = this.props
+    const { boardWidth, boardHeight } = config[difficulty]
+    for (let x = 0; x < boardWidth; x++) {
+      for (let y = 0; y < boardHeight; y++) {
+        if (board[x][y].bomb) {
+          board[x][y] = Object.assign({}, board[x][y], { open: true })
+        } 
       }
     }
     this.setState({ board }, () => {
@@ -161,7 +163,6 @@ class SingleplayerGame extends Component {
           }
         }
       }
-      console.log(bombCount)
       if (!recursive && this.state.millis === 0 && (board[x][y].bomb || bombCount !== 0)) {
         this._initBoard(this.props.difficulty, true, x, y)
         return

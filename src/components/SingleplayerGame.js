@@ -16,7 +16,7 @@ class SingleplayerGame extends Component {
   constructor(props) {
     super(props)
     const { difficulty } = this.props
-    this.state = { board: this._initBoard(difficulty), millis: 0}
+    this.state = { board: this._initBoard(difficulty), millis: 0 }
     this.handleClick = this.handleClick.bind(this)
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
@@ -40,7 +40,6 @@ class SingleplayerGame extends Component {
   }
 
   _initBombPlaces(difficulty, startX = 0, startY = 0) {
-    console.log(startX + "  " + startY)
     const bombPlaces = []
     const { boardWidth, boardHeight, bombNum } = config[difficulty]
     while (bombPlaces.length < bombNum) {
@@ -52,14 +51,14 @@ class SingleplayerGame extends Component {
         const duplicated = bombPlaces.filter((place) => {
           return place.x === x && place.y === y
         }).length > 0
-        if (!duplicated ) {
+        if (!duplicated) {
           bombPlaces.push({ x: x, y: y })
         }
       }
     }
-    if(startX !== 0 || startY !== 0) {
+    if (startX !== 0 || startY !== 0) {
       this.props.dispatch(init())
-      this.setState({ board: this._initBoard(difficulty)}, () => {
+      this.setState({ board: this._initBoard(difficulty) }, () => {
         this._open(startX, startY)
       })
     }
@@ -75,7 +74,8 @@ class SingleplayerGame extends Component {
 
   handleClickCell(x, y) {
     const { gameover, clear } = this.props
-    if (gameover || clear || this.state.board[x][y].flagged) {
+    const board = this.state.board
+    if (gameover || clear || board[x][y].flagged) {
       return
     }
     this._open(x, y)
@@ -83,6 +83,7 @@ class SingleplayerGame extends Component {
 
   handleRightClickCell(x, y) {
     const { gameover, clear } = this.props
+    console.log(this.state.board[x][y])
     if (gameover || clear || this.state.board[x][y].open) {
       return
     }
@@ -143,7 +144,7 @@ class SingleplayerGame extends Component {
     })
   }
 
-  _open(x, y) {
+  _open(x, y, recursive=false) {
     const board = [].concat(this.state.board)
     if (!board[x][y].open) {
       const { boardWidth, boardHeight } = config[this.props.difficulty]
@@ -160,6 +161,11 @@ class SingleplayerGame extends Component {
           }
         }
       }
+      console.log(bombCount)
+      if (!recursive && this.state.millis === 0 && (board[x][y].bomb || bombCount !== 0)) {
+        this._initBoard(this.props.difficulty, true, x, y)
+        return
+      }
       board[x][y] = Object.assign({}, board[x][y], { open: true, bombCount: bombCount })
       this.setState({ board })
       if (board[x][y].flagged) {
@@ -167,10 +173,6 @@ class SingleplayerGame extends Component {
       }
       if (board[x][y].bomb) {
         this._stopTimer()
-        if (this.state.millis === 0) {
-          this._initBoard(this.props.difficulty, true, x, y)
-          return
-        }
         this.showAllBombs(board)
         this.props._saveGame(this.state.millis, this.props.difficulty, false)
       }
@@ -189,7 +191,7 @@ class SingleplayerGame extends Component {
               (board[i][j].flagged)) {
               continue
             }
-            this._open(i, j)
+            this._open(i, j, recursive = true)
           }
         }
       }
@@ -244,7 +246,7 @@ class SingleplayerGame extends Component {
     this.clock = setInterval(() => {
       let currenttime = Date.now()
       this.setState({ millis: currenttime - starttime })
-    }, )
+    })
   }
 
   _stopTimer = (reset = false) => {

@@ -23,6 +23,12 @@ h3 {
     margin-right: 20px;
 }
 
+#onlineusers {
+    display: inline;
+    color: white;
+    margin: 10px 10px;
+}
+
 a {
     text-decoration: none;
     color: skyblue;

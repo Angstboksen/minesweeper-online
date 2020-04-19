@@ -1,8 +1,20 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 import { GoogleLogin, GoogleLogout } from 'react-google-login'
-import { Navbar, Nav, Form, FormControl, Button, Image } from 'react-bootstrap'
+import { Navbar, Nav, Form, FormControl, Button, Image, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
+import '../styles/index.css'
 
 export class Header extends Component {
+
+    state = {
+        onlineCount: 0,
+        onlineUsers: []
+    }
+
+    componentDidMount() {
+        this.loadOnlineUsers()
+    }
 
     _logout = () => {
         this.props._resetState()
@@ -11,6 +23,12 @@ export class Header extends Component {
 
     _login = (response) => {
         this.props._login(response)
+    }
+
+    loadOnlineUsers = async () => {
+        const res = await axios(REQUEST_FUNCTIONS.GET_ONLINE_USERS())
+        const users = res.data
+        this.setState({ onlineCount: users.length, onlineUsers: users })
     }
 
     getNavLinks = () => {
@@ -47,17 +65,39 @@ export class Header extends Component {
         }
     }
 
+    stringifyUsers = () => {
+        let txt = ""
+        for (let user of this.state.onlineUsers) {
+            txt += user.first_name + "\n"
+        }
+        return txt
+    }
+
     getContent = () => {
         const { isSignedIn, userimageurl } = this.props.credentials
         return (
             <>
                 <Navbar expand="lg" bg="dark" variant="dark">
-                    <p style={{ display: 'inline', color: 'white', marginRight: '10px' }}>v0.1.12</p>
+                    <p style={pstyle}>v0.1.13</p>
                     <Navbar.Brand href="/">Minesweeper Online</Navbar.Brand>
                     {this.getNavLinks()}
-                    {isSignedIn &&
+
+
+
+                    <OverlayTrigger
+                        key='bottom'
+                        placement='bottom'
+                        overlay={
+                            <Tooltip id={`tooltip-bottom`}>
+                                <strong>{this.stringifyUsers()}</strong>
+                            </Tooltip>}>
+                        <Button variant="secondary">Online users: {this.state.onlineCount}</Button>
+                    </OverlayTrigger>{' '}
+
+                    {
+                        isSignedIn &&
                         <>
-                            <Form inline style={{ marginRight: "20px" }}>
+                            <Form inline style={{ margin: "0 20px 0 20px" }}>
                                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                                 <Button variant="outline-info">Search</Button>
                             </Form>
@@ -69,7 +109,8 @@ export class Header extends Component {
                             />
                         </>
                     }
-                    {!isSignedIn &&
+                    {
+                        !isSignedIn &&
                         <>
                             <GoogleLogin
                                 clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
@@ -81,7 +122,7 @@ export class Header extends Component {
                             />
                         </>
                     }
-                </Navbar>
+                </Navbar >
             </>
         )
     }
@@ -90,5 +131,11 @@ export class Header extends Component {
         return this.getContent()
     }
 }
+const pstyle = {
+    display: 'inline',
+    color: 'white',
+    margin: '10px 10px'
+}
+
 
 export default Header

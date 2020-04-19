@@ -115,7 +115,14 @@ function PUT_USER_ONLINE(id, googleId, email, isOnline) {
 }
 
 //Getting all online users
-
+function GET_ONLINE_USERS() {
+  const options = {
+    method: 'GET',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    url: FORMAT_URL(`onlineusers/`),
+  }
+  return options
+}
 
 const REQUEST_FUNCTIONS = {
   GET_USER : GET_USER_CONFIG,
@@ -126,6 +133,7 @@ const REQUEST_FUNCTIONS = {
   POST_GAME : POST_USER_GAME,
   GET_GLOBAL_HIGHSCORES : GET_GLOBAL_HIGHSCORES,
   PUT_USER_ONLINE : PUT_USER_ONLINE,
+  GET_ONLINE_USERS : GET_ONLINE_USERS
 }
 
 

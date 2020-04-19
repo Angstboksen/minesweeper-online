@@ -98,6 +98,25 @@ function POST_USER_GAME(token, game_time, game_won, difficulty) {
   return options
 }
 
+//Put user online
+function PUT_USER_ONLINE(id, googleId, email, isOnline) {
+  const data = {
+    'username' : googleId,
+    'email' : email,
+    'online': isOnline
+  }
+  const options = {
+    method: 'PUT',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    data : data,
+    url: FORMAT_URL(`users/${id}/`),
+  }
+  return options
+}
+
+//Getting all online users
+
+
 const REQUEST_FUNCTIONS = {
   GET_USER : GET_USER_CONFIG,
   GET_TOKEN : GET_USER_TOKEN,
@@ -105,7 +124,8 @@ const REQUEST_FUNCTIONS = {
   GET_HIGHSCORELIST : GET_USER_HIGHSCORELIST,
   POST_USER : POST_NEW_USER,
   POST_GAME : POST_USER_GAME,
-  GET_GLOBAL_HIGHSCORES : GET_GLOBAL_HIGHSCORES
+  GET_GLOBAL_HIGHSCORES : GET_GLOBAL_HIGHSCORES,
+  PUT_USER_ONLINE : PUT_USER_ONLINE,
 }
 
 

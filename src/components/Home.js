@@ -5,7 +5,6 @@ import { GoogleLogin, GoogleLogout } from 'react-google-login'
 
 class Home extends Component {
 
-
     _logout = () => {
         this.props._resetState()
         this.props.history.push("/")

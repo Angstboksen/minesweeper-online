@@ -22,19 +22,8 @@ class Wrapper extends Component {
         const { googleId, givenName, familyName, email, imageUrl } = response.profileObj
         const res = await axios(REQUEST_FUNCTIONS.GET_TOKEN(googleId, googleId))
             .catch(async () => {
-                const user = await axios(REQUEST_FUNCTIONS.POST_USER(googleId, givenName, familyName, email))
-                console.log(user)
-                const token = await axios(REQUEST_FUNCTIONS.GET_TOKEN(googleId, googleId))
-                this.setState({
-                    isSignedIn: true,
-                    username: givenName,
-                    useremail: email,
-                    userimageurl: imageUrl,
-                    token: token
-                }, () => {
-                    this.getHighscores()
-                    //console.clear()
-                })
+                await axios(REQUEST_FUNCTIONS.POST_USER(googleId, givenName, familyName, email))
+                await axios(REQUEST_FUNCTIONS.GET_TOKEN(googleId, googleId))
             })
 
         if (res !== undefined && res.status === 200) {
@@ -43,10 +32,15 @@ class Wrapper extends Component {
                 username: givenName,
                 useremail: email,
                 userimageurl: imageUrl,
+                googleId: googleId,
                 token: res.data.token
-            }, () => {
+            }, async () => {
                 this.getHighscores()
                 this.getGlobalHighscores()
+                const res = await axios(REQUEST_FUNCTIONS.GET_USER(this.state.token))
+                const id = res.data.id
+                await axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(id, googleId, email, true))
+                this.setState({ userId: id })
                 //console.clear()
             })
         }
@@ -56,8 +50,11 @@ class Wrapper extends Component {
         console.log(response)
     }
 
-    _resetState = () => {
+    _resetState = async () => {
+        const { googleId, useremail, userId } = this.state
+        const editonline = await axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, false))
         this.setState(DEFAULT_WRAPPER_STATE)
+        return editonline
     }
 
     sortHighscores = (highscores) => {
@@ -67,7 +64,7 @@ class Wrapper extends Component {
     }
 
     getHighscores = async () => {
-        const {token} = this.state
+        const { token } = this.state
         if (token === undefined) {
             return DEFAULT_EMPTY_HIGHSCORES
         }
@@ -95,7 +92,7 @@ class Wrapper extends Component {
             "maniac": this.sortHighscores(highscores.filter(h => h.difficulty === 'maniac')),
             'loaded': true
         }
-        this.setState({globalhighscores : obj})
+        this.setState({ globalhighscores: obj })
     }
 
     _saveGame = async (time, difficulty, game_won) => {
@@ -130,7 +127,7 @@ class Wrapper extends Component {
     }
 
     _updateDifficulty = (difficulty) => {
-        this.setState({difficulty : difficulty})
+        this.setState({ difficulty: difficulty })
     }
 
     render() {

@@ -52,6 +52,7 @@ export class Header extends Component {
         return (
             <>
                 <Navbar expand="lg" bg="dark" variant="dark">
+                    <p style={{ display: 'inline', color: 'white', marginRight: '10px' }}>v0.1.12</p>
                     <Navbar.Brand href="/">Minesweeper Online</Navbar.Brand>
                     {this.getNavLinks()}
                     {isSignedIn &&

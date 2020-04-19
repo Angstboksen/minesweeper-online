@@ -68,7 +68,7 @@ export class Header extends Component {
     stringifyUsers = () => {
         let txt = ""
         for (let user of this.state.onlineUsers) {
-            txt += user.first_name + "\n"
+            txt += user.first_name + '\n'
         }
         return txt
     }
@@ -89,7 +89,7 @@ export class Header extends Component {
                         placement='bottom'
                         overlay={
                             <Tooltip id={`tooltip-bottom`}>
-                                <strong>{this.stringifyUsers()}</strong>
+                                <strong style={{whiteSpace: 'pre-line'}}>{this.stringifyUsers()}</strong>
                             </Tooltip>}>
                         <Button variant="secondary">Online users: {this.state.onlineCount}</Button>
                     </OverlayTrigger>{' '}

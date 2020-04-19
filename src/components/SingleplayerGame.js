@@ -138,7 +138,7 @@ class SingleplayerGame extends Component {
       for (let y = 0; y < boardHeight; y++) {
         if (board[x][y].bomb) {
           board[x][y] = Object.assign({}, board[x][y], { open: true })
-        } 
+        }
       }
     }
     this.setState({ board }, () => {
@@ -146,7 +146,7 @@ class SingleplayerGame extends Component {
     })
   }
 
-  _open(x, y, recursive=false) {
+  _open(x, y, recursive = false) {
     const board = [].concat(this.state.board)
     if (!board[x][y].open) {
       const { boardWidth, boardHeight } = config[this.props.difficulty]
@@ -179,8 +179,8 @@ class SingleplayerGame extends Component {
       }
       if (this._isClear(board)) {
         this._stopTimer()
-        this.props._saveGame(this.state.millis, this.props.difficulty, true)
         this.props.dispatch(clear())
+        this.props._saveGame(this.state.millis, this.props.difficulty, true)
       }
 
       if (bombCount === 0 && !board[x][y].bomb) {

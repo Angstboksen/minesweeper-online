@@ -39,7 +39,6 @@ class Wrapper extends Component {
                 this.getGlobalHighscores()
                 const res = await axios(REQUEST_FUNCTIONS.GET_USER(this.state.token))
                 const id = res.data.id
-                await axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(id, googleId, email, true))
                 this.setState({ userId: id })
                 //console.clear()
             })

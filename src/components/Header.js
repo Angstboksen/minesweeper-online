@@ -43,7 +43,7 @@ export class Header extends Component {
         this.getUsersFromApi()
         return setInterval(async () => {
             this.getUsersFromApi()
-        }, 10000)
+        }, 7000)
     }
 
     getNavLinks = () => {
@@ -93,7 +93,7 @@ export class Header extends Component {
         return (
             <>
                 <Navbar expand="lg" bg="dark" variant="dark">
-                    <p style={pstyle}>v0.1.14</p>
+                    <p style={pstyle}>v0.1.15</p>
                     <Navbar.Brand href="/">Minesweeper Online</Navbar.Brand>
                     {this.getNavLinks()}
                     <OverlayTrigger
@@ -103,7 +103,7 @@ export class Header extends Component {
                             <Tooltip id={`tooltip-bottom`}>
                                 <strong style={{ whiteSpace: 'pre-line' }}>{this.stringifyUsers()}</strong>
                             </Tooltip>}>
-                        <Button variant="secondary">Online users: {this.state.onlineCount}</Button>
+                        <Button variant="secondary">Players in game: {this.state.onlineCount}</Button>
                     </OverlayTrigger>{' '}
                     {isSignedIn &&
                         <>

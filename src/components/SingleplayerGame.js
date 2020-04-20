@@ -9,6 +9,8 @@ import Header from './Header'
 import { GiFireBomb } from "react-icons/gi"
 import { changeDifficulty } from '../actions'
 import HighscoreList from './HighscoreList'
+import axios from 'axios'
+import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
 
 class SingleplayerGame extends Component {
 
@@ -25,7 +27,6 @@ class SingleplayerGame extends Component {
   }
 
   _initBoard(difficulty, hitBomb = false, startX = 0, startY = 0) {
-    this._stopTimer(true)
     this.bombPlaces = hitBomb ? this._initBombPlaces(difficulty, startX, startY) : this.bombPlaces = this._initBombPlaces(difficulty)
     const { boardWidth, boardHeight } = config[difficulty]
     const board = Array.from(
@@ -67,6 +68,7 @@ class SingleplayerGame extends Component {
 
   handleClick(e) {
     e.preventDefault()
+    this._stopTimer(true)
     const { difficulty } = this.props
     this.props.dispatch(init())
     this.setState({ board: this._initBoard(difficulty) })
@@ -243,13 +245,16 @@ class SingleplayerGame extends Component {
     this.updateBoard(difficulty.name)
   }
 
-  _startTimer = async () => {
+  _startTimer = () => {
     let starttime = Date.now()
     this.setState({ gameIsRunning: true, starttime: starttime, millis: 0 })
     this.clock = setInterval(() => {
       let currenttime = Date.now()
       this.setState({ millis: currenttime - starttime })
     })
+    //User now active
+    const {userId, googleId, useremail} = this.props.credentials
+    axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, true))
   }
 
   _stopTimer = (reset = false) => {
@@ -259,6 +264,9 @@ class SingleplayerGame extends Component {
       this.setState({ gameIsRunning: false })
     }
     clearInterval(this.clock)
+    //User now inactive
+    const {userId, googleId, useremail} = this.props.credentials
+    axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, false))
   }
 
   formatClockValue = (type) => {

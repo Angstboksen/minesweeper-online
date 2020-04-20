@@ -12,11 +12,19 @@ export class Header extends Component {
         onlineUsers: []
     }
 
-    componentDidMount() {
-        this.loadOnlineUsers()
+    constructor(props){
+        super(props)
+        this.interval = this.loadOnlineUsers()
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval)
     }
 
     _logout = () => {
+        const {useremail} = this.props.credentials
+        let users = this.state.onlineUsers.filter(u => u.email !== useremail )
+        this.setState({onlineUsers : users, onlineCount : this.state.onlineCount - 1})
         this.props._resetState()
         this.props.history.push("/")
     }
@@ -25,10 +33,17 @@ export class Header extends Component {
         this.props._login(response)
     }
 
-    loadOnlineUsers = async () => {
+    getUsersFromApi = async () => {
         const res = await axios(REQUEST_FUNCTIONS.GET_ONLINE_USERS())
         const users = res.data
         this.setState({ onlineCount: users.length, onlineUsers: users })
+    }
+
+    loadOnlineUsers = async () => {
+        this.getUsersFromApi()
+        return setInterval(async () => {
+            this.getUsersFromApi()
+        }, 10000)
     }
 
     getNavLinks = () => {
@@ -78,24 +93,19 @@ export class Header extends Component {
         return (
             <>
                 <Navbar expand="lg" bg="dark" variant="dark">
-                    <p style={pstyle}>v0.1.13</p>
+                    <p style={pstyle}>v0.1.14</p>
                     <Navbar.Brand href="/">Minesweeper Online</Navbar.Brand>
                     {this.getNavLinks()}
-
-
-
                     <OverlayTrigger
                         key='bottom'
                         placement='bottom'
                         overlay={
                             <Tooltip id={`tooltip-bottom`}>
-                                <strong style={{whiteSpace: 'pre-line'}}>{this.stringifyUsers()}</strong>
+                                <strong style={{ whiteSpace: 'pre-line' }}>{this.stringifyUsers()}</strong>
                             </Tooltip>}>
                         <Button variant="secondary">Online users: {this.state.onlineCount}</Button>
                     </OverlayTrigger>{' '}
-
-                    {
-                        isSignedIn &&
+                    {isSignedIn &&
                         <>
                             <Form inline style={{ margin: "0 20px 0 20px" }}>
                                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import Header from './Header';
-import { GoogleLogin, GoogleLogout } from 'react-google-login'
+import { GoogleLogin} from 'react-google-login'
 
 class Home extends Component {
 
@@ -15,11 +15,6 @@ class Home extends Component {
         return isSignedIn ?
             <div>
                 <p>Hello {username}, you're signed in </p>
-                <GoogleLogout
-                    clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
-                    buttonText="Logout"
-                    onLogoutSuccess={this._logout}
-                />
             </div>
             :
             <div>

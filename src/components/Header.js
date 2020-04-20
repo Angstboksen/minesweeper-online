@@ -43,7 +43,7 @@ export class Header extends Component {
         this.getUsersFromApi()
         return setInterval(async () => {
             this.getUsersFromApi()
-        }, 7000)
+        }, 4000)
     }
 
     getNavLinks = () => {

@@ -229,6 +229,7 @@ class SingleplayerGame extends Component {
   }
 
   updateBoard = (difficulty) => {
+    this._stopTimer(true)
     this.setState({ board: this._initBoard(difficulty) })
   }
 

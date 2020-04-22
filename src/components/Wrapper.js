@@ -150,12 +150,14 @@ class Wrapper extends Component {
                                 _saveGame={this._saveGame}
                                 _updateDifficulty={this._updateDifficulty} />
                         </Route>
-                        <Route path="/multiplayer">
+                        <Route exact path="/multiplayer">
                             <MultiplayerGame
                                 credentials={this.state}
                                 _login={this._login}
                                 _loginerror={this._loginerror}
-                                _resetState={this._resetState} />
+                                _resetState={this._resetState}
+                                _saveGame={this._saveGame}
+                                _updateDifficulty={this._updateDifficulty} />
                         </Route>
                     </Switch>
                 </>

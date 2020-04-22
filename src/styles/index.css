@@ -29,6 +29,11 @@ h3 {
     margin: 10px 10px;
 }
 
+.invite-div {
+    width: 25vw;
+    margin: 100px auto;
+}
+
 a {
     text-decoration: none;
     color: skyblue;

@@ -124,6 +124,54 @@ function GET_ONLINE_USERS() {
   return options
 }
 
+//Posting a new base game
+function POST_MULTIPLAYER_GAME(player_one, player_two, difficulty, game_code) {
+  const data = {
+    'player_one': player_one,
+    'player_two': player_two,
+    'difficulty': difficulty,
+    'game_code': game_code,
+  }
+  const options = {
+    method: 'POST',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    data: data,
+    url: FORMAT_URL(`multiplayergames/`),
+  }
+  return options
+}
+
+//Finalize game with winner player and time 
+
+function PUT_MULTIPLAYER_GAME(game_winner, time, game_code) {
+  const data = {
+    'game_winner': game_winner,
+    'game_winner_time': time
+  }
+  const options = {
+    method: 'PUT',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    data: data,
+    url: FORMAT_URL(`multiplayergames/${game_code}/`),
+  }
+  return options
+}
+
+//Checking if a user exist
+function CHECK_USER_EXIST(email) {
+  const data = {
+    'email': email
+  }
+  const options = {
+    method: 'POST',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    data: data,
+    url: FORMAT_URL(`validateuser/`),
+  }
+  return options
+}
+
+
 const REQUEST_FUNCTIONS = {
   GET_USER : GET_USER_CONFIG,
   GET_TOKEN : GET_USER_TOKEN,
@@ -133,7 +181,10 @@ const REQUEST_FUNCTIONS = {
   POST_GAME : POST_USER_GAME,
   GET_GLOBAL_HIGHSCORES : GET_GLOBAL_HIGHSCORES,
   PUT_USER_ONLINE : PUT_USER_ONLINE,
-  GET_ONLINE_USERS : GET_ONLINE_USERS
+  GET_ONLINE_USERS : GET_ONLINE_USERS,
+  POST_MULTIPLAYER_GAME: POST_MULTIPLAYER_GAME,
+  CHECK_USER_EXIST: CHECK_USER_EXIST,
+  FINALIZE_MP_GAME: PUT_MULTIPLAYER_GAME
 }
 
 

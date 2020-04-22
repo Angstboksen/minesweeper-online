@@ -25,7 +25,7 @@ export class HighscoreList extends Component {
                 <h3>Leaderbords for <span style={{ color: DIFF_COLORS[difficulty] }}>{difficulty.toUpperCase()}</span></h3> :
                 <h3>Personal highscores!</h3>}
             <p style={{ color: DIFF_COLORS[difficulty] }}>{difficulty.toUpperCase()}</p>
-            {(!highscoresloaded) ? <Spinner animation="border" variant="dark" /> : null}
+            {(!highscoresloaded) ? <Spinner animation="border" variant="danger" /> : null}
             {(highscores.length === 0) ? <p>No {isGlobal ? "leaderbords" : "highscores"} for <span style={{ color: DIFF_COLORS[difficulty] }}>{difficulty.toUpperCase()}
             </span>  difficulty stored!</p> : null}
             <ListGroup>{highscores.slice(0, 10).map((object, i) => {

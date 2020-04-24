@@ -83,7 +83,7 @@ export class Header extends Component {
     stringifyUsers = () => {
         let txt = ""
         for (let user of this.state.onlineUsers) {
-            txt += user.first_name + '\n'
+            txt += user + '\n'
         }
         return txt
     }

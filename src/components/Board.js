@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import Row from './Row'
 import '../styles/Board.css'
 
-export default class Board extends Component {
+export default class Board extends PureComponent {
   renderRows() {
     const rows = []
     this.props.board.forEach((row, i) => {

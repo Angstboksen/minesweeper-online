@@ -26,8 +26,8 @@ class SingleplayerGame extends Component {
     this.clock = undefined
   }
 
-  _initBoard(difficulty, hitBomb = false, startX = 0, startY = 0) {
-    this.bombPlaces = hitBomb ? this._initBombPlaces(difficulty, startX, startY) : this.bombPlaces = this._initBombPlaces(difficulty)
+  _initBoard(difficulty, hitBomb = false, startX = -1, startY = -1) {
+    this.bombPlaces = this._initBombPlaces(difficulty, startX, startY) 
     const { boardWidth, boardHeight } = config[difficulty]
     const board = Array.from(
       new Array(boardWidth), () => new Array(boardHeight).fill(
@@ -40,7 +40,7 @@ class SingleplayerGame extends Component {
     return board
   }
 
-  _initBombPlaces(difficulty, startX = -1, startY = -1) {
+  _initBombPlaces(difficulty, startX, startY) {
     const bombPlaces = []
     const { boardWidth, boardHeight, bombNum } = config[difficulty]
     while (bombPlaces.length < bombNum) {

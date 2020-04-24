@@ -273,10 +273,10 @@ class SingleplayerGame extends Component {
   _startTimer = () => {
     let starttime = Date.now()
     this.setState({ gameIsRunning: true, starttime: starttime, millis: 0 })
-    // this.clock = setInterval(() => {
-    //   let currenttime = Date.now()
-    //   this.setState({ millis: currenttime - starttime })
-    // })
+    this.clock = setInterval(() => {
+      let currenttime = Date.now()
+      this.setState({ millis: currenttime - starttime })
+    }, 200)
     //User now active
     const { userId, googleId, useremail } = this.props.credentials
     axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, true))

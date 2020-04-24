@@ -54,6 +54,7 @@ class SingleplayerGame extends Component {
   }
 
   _tempBoard(difficulty) {
+    this.setState({readyToStart: true})
     const { boardWidth, boardHeight } = config[difficulty]
     const board = Array.from(
       new Array(boardWidth), () => new Array(boardHeight).fill(
@@ -94,7 +95,7 @@ class SingleplayerGame extends Component {
     this._stopTimer(true)
     const { difficulty } = this.props
     this.props.dispatch(init())
-    this.setState({ board: this._tempBoard(difficulty), readyToStart: true })
+    this.setState({ board: this._tempBoard(difficulty)})
   }
 
   handleClickCell(x, y) {
@@ -272,10 +273,10 @@ class SingleplayerGame extends Component {
   _startTimer = () => {
     let starttime = Date.now()
     this.setState({ gameIsRunning: true, starttime: starttime, millis: 0 })
-    this.clock = setInterval(() => {
-      let currenttime = Date.now()
-      this.setState({ millis: currenttime - starttime })
-    })
+    // this.clock = setInterval(() => {
+    //   let currenttime = Date.now()
+    //   this.setState({ millis: currenttime - starttime })
+    // })
     //User now active
     const { userId, googleId, useremail } = this.props.credentials
     axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, true))

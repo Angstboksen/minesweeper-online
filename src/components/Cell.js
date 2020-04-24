@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {FaFlag} from 'react-icons/fa'
 import {GiFireBomb} from 'react-icons/gi'
 import '../styles/Cell.css'
@@ -18,7 +18,7 @@ const openStyle = {
   border: 'solid 1px darkgray'
 }
 
-export default class Cell extends Component {
+export default class Cell extends PureComponent {
   constructor(props) {
     super(props)
     this._handleClick = this._handleClick.bind(this)

@@ -276,7 +276,7 @@ class SingleplayerGame extends Component {
     this.clock = setInterval(() => {
       let currenttime = Date.now()
       this.setState({ millis: currenttime - starttime })
-    }, 200)
+    }, 1)
     //User now active
     const { userId, googleId, useremail } = this.props.credentials
     axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, true))

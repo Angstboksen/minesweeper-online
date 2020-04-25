@@ -201,13 +201,13 @@ class SingleplayerGame extends Component {
     if (board[x][y].bomb) {
       this._stopTimer()
       this.showAllBombs()
-      //this.props._saveGame(this.state.millis, this.props.difficulty, false)
+      this.props._saveGame(this.state.millis, this.props.difficulty, false)
       return
     }
     if (this._isClear(board)) {
       this._stopTimer()
       this.props.dispatch(clear())
-      //this.props._saveGame(this.state.millis, this.props.difficulty, true)
+      this.props._saveGame(this.state.millis, this.props.difficulty, true)
       return
     }
 

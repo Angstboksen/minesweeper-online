@@ -12,6 +12,7 @@ import HighscoreList from './HighscoreList'
 import axios from 'axios'
 import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
 
+
 class SingleplayerGame extends Component {
 
 
@@ -24,6 +25,7 @@ class SingleplayerGame extends Component {
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
     this.handleDoubleClickCell = this.handleDoubleClickCell.bind(this)
     this.clock = undefined
+    this.allBombPlaces = []
   }
 
   _initBoard(difficulty, startX, startY) {
@@ -36,8 +38,8 @@ class SingleplayerGame extends Component {
       const x = Math.floor(Math.random() * boardWidth)
       const y = Math.floor(Math.random() * boardHeight)
 
-      if (
-        Math.abs(startX - x) <= 1 && Math.abs(startY - y) <= 1 || bombPlaces.filter((place) => {
+      if ((
+        Math.abs(startX - x) <= 1 && Math.abs(startY - y) <= 1) || bombPlaces.filter((place) => {
           return place.x === x && place.y === y
         }).length > 0) {
         continue
@@ -51,6 +53,7 @@ class SingleplayerGame extends Component {
 
     this.props.dispatch(init())
     this.setState({ board: board, readyToStart: false })
+    this.allBombPlaces = bombPlaces
   }
 
   _tempBoard(difficulty) {
@@ -158,19 +161,16 @@ class SingleplayerGame extends Component {
     }
   }
 
-  showAllBombs = (board) => {
-    const { difficulty } = this.props
-    const { boardWidth, boardHeight } = config[difficulty]
-    for (let x = 0; x < boardWidth; x++) {
-      for (let y = 0; y < boardHeight; y++) {
-        if (board[x][y].bomb) {
+  showAllBombs = () => {
+    const board = [].concat(this.state.board)
+    for (let coords of this.allBombPlaces) {
+      const x = coords.x
+      const y = coords.y
           board[x][y] = Object.assign({}, board[x][y], { open: true })
-        }
-      }
     }
-    this.setState({ board }, () => {
+    this.setState({ board }) 
       this.props.dispatch(gameover())
-    })
+    
   }
 
   _open(x, y) {
@@ -200,14 +200,14 @@ class SingleplayerGame extends Component {
     }
     if (board[x][y].bomb) {
       this._stopTimer()
-      this.showAllBombs(board)
-      this.props._saveGame(this.state.millis, this.props.difficulty, false)
+      this.showAllBombs()
+      //this.props._saveGame(this.state.millis, this.props.difficulty, false)
       return
     }
     if (this._isClear(board)) {
       this._stopTimer()
       this.props.dispatch(clear())
-      this.props._saveGame(this.state.millis, this.props.difficulty, true)
+      //this.props._saveGame(this.state.millis, this.props.difficulty, true)
       return
     }
 

@@ -50,7 +50,7 @@ export class MultiplayerGame extends Component {
                     history={this.props.history}
                     origin="multiplayer"
                 />
-                <h1>COMING SOON</h1>
+                <h1>Duel a friend!</h1>
                 <div className="invite-div">
                     <Form onSubmit = {this.onSubmit}>
                         <Form.Group >

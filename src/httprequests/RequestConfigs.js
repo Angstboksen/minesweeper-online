@@ -141,22 +141,6 @@ function POST_MULTIPLAYER_GAME(player_one, player_two, difficulty, game_code) {
   return options
 }
 
-//Finalize game with winner player and time 
-
-function PUT_MULTIPLAYER_GAME(game_winner, time, game_code) {
-  const data = {
-    'game_winner': game_winner,
-    'game_winner_time': time
-  }
-  const options = {
-    method: 'PUT',
-    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
-    data: data,
-    url: FORMAT_URL(`multiplayergames/${game_code}/`),
-  }
-  return options
-}
-
 //Checking if a user exist
 function CHECK_USER_EXIST(email) {
   const data = {
@@ -171,6 +155,89 @@ function CHECK_USER_EXIST(email) {
   return options
 }
 
+//Getting a spesific game instance based on the game code
+function GET_GAME_INSTANCE(game_code) {
+  const options = {
+    method: 'GET',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    url: FORMAT_URL(`spectatedgames/${game_code}/`),
+  }
+  return options
+}
+
+//Posting a spesific game instance
+function POST_GAME_INSTANCE(userid, difficulty, game_code) {
+  const data = {
+    'user': userid,
+    'game_code': game_code,
+    'game_time': -1,
+    'difficulty': difficulty
+  }
+  const options = {
+    method: 'POST',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    data: data,
+    url: FORMAT_URL(`spectatedgames/`),
+  }
+  return options
+}
+
+//Getting the coordinates for a spesific game
+function GET_GAME_COORDINATES(game_code) {
+  const options = {
+    method: 'GET',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    url: FORMAT_URL(`coordslist/${game_code}/`),
+  }
+  return options
+}
+
+//Getting a coordinates instance for a spesific game
+function GET_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord) {
+  const data = {
+    'x_coord': x_coord,
+    'y_coord': y_coord
+  }
+  const options = {
+    method: 'POST',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    data: data,
+    url: FORMAT_URL(`coordsdetail/${game_code}/`),
+  }
+  return options
+}
+
+//Getting a coordinates instance for a spesific game
+function CHANGE_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged) {
+  const data = {
+    'x_coord': x_coord,
+    'y_coord': y_coord,
+    'flagged': flagged
+  }
+  const options = {
+    method: 'PUT',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    data: data,
+    url: FORMAT_URL(`coordsdetail/${game_code}/`),
+  }
+  return options
+}
+
+//Posting a new coordinate instance
+function POST_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged) {
+  const data = {
+    'x_coord': x_coord,
+    'y_coord': y_coord,
+    'flagged': flagged
+  }
+  const options = {
+    method: 'POST',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    data: data,
+    url: FORMAT_URL(`coordslist/${game_code}/`),
+  }
+  return options
+}
 
 const REQUEST_FUNCTIONS = {
   GET_USER : GET_USER_CONFIG,
@@ -184,9 +251,12 @@ const REQUEST_FUNCTIONS = {
   GET_ONLINE_USERS : GET_ONLINE_USERS,
   POST_MULTIPLAYER_GAME: POST_MULTIPLAYER_GAME,
   CHECK_USER_EXIST: CHECK_USER_EXIST,
-  FINALIZE_MP_GAME: PUT_MULTIPLAYER_GAME
+  GET_GAME_COORDINATES: GET_GAME_COORDINATES,
+  GET_COORDINATES_INSTANCE: GET_GAME_COORDINATES_INSTANCE,
+  CHANGE_COORDINATES_INSTANCE: CHANGE_GAME_COORDINATES_INSTANCE,
+  POST_COORDINATES_INSTANCE: POST_GAME_COORDINATES_INSTANCE,
+  GET_GAME_INSTANCE: GET_GAME_INSTANCE,
+  POST_GAME_INSTANCE: POST_GAME_INSTANCE
 }
-
-
 
 export default REQUEST_FUNCTIONS

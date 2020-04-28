@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
 import axios from 'axios'
+import SpectatingBoard from './SpectatingBoard'
 
 export class MultiplayerGame extends Component {
 
@@ -64,6 +65,7 @@ export class MultiplayerGame extends Component {
                         <Button variant="primary" type="submit">Create game</Button>
                     </Form>
                 </div>
+                <SpectatingBoard difficulty={this.props.credentials.difficulty}/>
             </div>
         )
     }

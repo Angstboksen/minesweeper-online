@@ -208,11 +208,12 @@ function GET_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord) {
 }
 
 //Getting a coordinates instance for a spesific game
-function CHANGE_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged) {
+function CHANGE_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged, bomb_count) {
   const data = {
     'x_coord': x_coord,
     'y_coord': y_coord,
-    'flagged': flagged
+    'flagged': flagged,
+    'bomb_count': bomb_count
   }
   const options = {
     method: 'PUT',
@@ -224,11 +225,12 @@ function CHANGE_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged) 
 }
 
 //Posting a new coordinate instance
-function POST_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged) {
+function POST_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged, bomb_count) {
   const data = {
     'x_coord': x_coord,
     'y_coord': y_coord,
-    'flagged': flagged
+    'flagged': flagged,
+    'bomb_count': bomb_count
   }
   const options = {
     method: 'POST',

@@ -59,7 +59,7 @@ a:hover {
 #highscoreroot {
     margin: 70px 10px;
     display: inline-block !important;
-    width: 50vh;
+    width: 20vw;
 }
 
 .highscorenumber {

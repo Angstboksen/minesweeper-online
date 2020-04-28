@@ -34,12 +34,6 @@ export class MultiplayerGame extends Component {
     }
 
     postBaseGame = async (opponent) => {
-        const {useremail, difficulty} = this.props.credentials
-        const randhex = randHex(8)
-        console.log(useremail)
-        console.log(difficulty)
-        console.log(opponent)
-        console.log(randhex)
         //const res = await axios(REQUEST_FUNCTIONS.POST_MULTIPLAYER_GAME(useremail, opponent , difficulty, randhex))
         //this.props.history.push(`multiplayer/${randhex}`)
     }
@@ -81,17 +75,4 @@ export class MultiplayerGame extends Component {
         )
     }
 }
-
-const randHex = (len) => {
-    let maxlen = 8
-    let min = Math.pow(16,Math.min(len,maxlen)-1) 
-    let max = Math.pow(16,Math.min(len,maxlen)) - 1
-    let n   = Math.floor( Math.random() * (max-min+1) ) + min
-    let r   = n.toString(16)
-    while ( r.length < len ) {
-       r = r + randHex( len - maxlen );
-    }
-    return r;
-  };
-
 export default withRouter(MultiplayerGame)

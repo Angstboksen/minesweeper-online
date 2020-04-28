@@ -9,15 +9,15 @@ const FORMAT_URL = (path) => {
 }
 
 //Getting user token
-function GET_USER_TOKEN(username, password){
+function GET_USER_TOKEN(username, password) {
   const data = {
-    'username' : username,
-    'password' : password
+    'username': username,
+    'password': password
   }
   const options = {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    data : data,
+    data: data,
     url: FORMAT_URL('api-token-auth/')
   }
   return options
@@ -64,18 +64,18 @@ function GET_GLOBAL_HIGHSCORES() {
 }
 
 //Posting a new user
-function POST_NEW_USER(username, firstname, lastname, email){
+function POST_NEW_USER(username, firstname, lastname, email) {
   const data = {
-    'username' : username,
-    'first_name' : firstname,
-    'last_name' : lastname,
-    'email' : email
+    'username': username,
+    'first_name': firstname,
+    'last_name': lastname,
+    'email': email
   }
 
   const options = {
     method: 'POST',
     headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
-    data : data,
+    data: data,
     url: FORMAT_URL('users/')
   }
   return options
@@ -85,14 +85,14 @@ function POST_NEW_USER(username, firstname, lastname, email){
 //Posting new game
 function POST_USER_GAME(token, game_time, game_won, difficulty) {
   const data = {
-    'game_time' : game_time,
-    'game_won' : game_won,
+    'game_time': game_time,
+    'game_won': game_won,
     'difficulty': difficulty
   }
   const options = {
     method: 'POST',
     headers: { 'Authorization': 'Token ' + token, 'content-type': 'json' },
-    data : data,
+    data: data,
     url: FORMAT_URL('games/')
   }
   return options
@@ -101,14 +101,14 @@ function POST_USER_GAME(token, game_time, game_won, difficulty) {
 //Put user online
 function PUT_USER_ONLINE(id, googleId, email, isOnline) {
   const data = {
-    'username' : googleId,
-    'email' : email,
+    'username': googleId,
+    'email': email,
     'online': isOnline
   }
   const options = {
     method: 'PUT',
     headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
-    data : data,
+    data: data,
     url: FORMAT_URL(`users/${id}/`),
   }
   return options
@@ -242,16 +242,29 @@ function POST_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged, bo
   return options
 }
 
+//Delete spectating game
+//Posting a new coordinate instance
+function DELETE_GAME(game_code) {
+
+  const options = {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    url: FORMAT_URL(`spectatedgames/${game_code}/`),
+  }
+  return options
+}
+
+
 const REQUEST_FUNCTIONS = {
-  GET_USER : GET_USER_CONFIG,
-  GET_TOKEN : GET_USER_TOKEN,
-  GET_GAMES : GET_USER_GAMES,
-  GET_HIGHSCORELIST : GET_USER_HIGHSCORELIST,
-  POST_USER : POST_NEW_USER,
-  POST_GAME : POST_USER_GAME,
-  GET_GLOBAL_HIGHSCORES : GET_GLOBAL_HIGHSCORES,
-  PUT_USER_ONLINE : PUT_USER_ONLINE,
-  GET_ONLINE_USERS : GET_ONLINE_USERS,
+  GET_USER: GET_USER_CONFIG,
+  GET_TOKEN: GET_USER_TOKEN,
+  GET_GAMES: GET_USER_GAMES,
+  GET_HIGHSCORELIST: GET_USER_HIGHSCORELIST,
+  POST_USER: POST_NEW_USER,
+  POST_GAME: POST_USER_GAME,
+  GET_GLOBAL_HIGHSCORES: GET_GLOBAL_HIGHSCORES,
+  PUT_USER_ONLINE: PUT_USER_ONLINE,
+  GET_ONLINE_USERS: GET_ONLINE_USERS,
   POST_MULTIPLAYER_GAME: POST_MULTIPLAYER_GAME,
   CHECK_USER_EXIST: CHECK_USER_EXIST,
   GET_GAME_COORDINATES: GET_GAME_COORDINATES,
@@ -259,7 +272,8 @@ const REQUEST_FUNCTIONS = {
   CHANGE_COORDINATES_INSTANCE: CHANGE_GAME_COORDINATES_INSTANCE,
   POST_COORDINATES_INSTANCE: POST_GAME_COORDINATES_INSTANCE,
   GET_GAME_INSTANCE: GET_GAME_INSTANCE,
-  POST_GAME_INSTANCE: POST_GAME_INSTANCE
+  POST_GAME_INSTANCE: POST_GAME_INSTANCE,
+  DELETE_GAME: DELETE_GAME
 }
 
 export default REQUEST_FUNCTIONS

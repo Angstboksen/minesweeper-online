@@ -20,6 +20,10 @@ export class SpectatingBoard extends Component {
         this._getGame()
     }
 
+    componentWillUnmount() {
+        clearInterval(this.interval)
+    }
+
     _tempBoard(difficulty) {
         const { boardWidth, boardHeight } = config[difficulty]
         const board = Array.from(
@@ -33,7 +37,6 @@ export class SpectatingBoard extends Component {
     _getGame = async () => {
         const {game_code} = this.props
         const res = await axios(REQUEST_FUNCTIONS.GET_GAME_INSTANCE(game_code))
-        console.log(res.data)
         this.setState({ game: res.data, board: this._tempBoard(res.data.difficulty), difficulty: res.data.difficulty }, () => {
             this.interval = setInterval(() => {
                 this._fetchBoard()
@@ -44,7 +47,6 @@ export class SpectatingBoard extends Component {
     _fetchBoard = async () => {
         const {game_code} = this.props
         const res = await axios(REQUEST_FUNCTIONS.GET_GAME_COORDINATES(game_code))
-        console.log(res.data)
         this._updateBoard(res.data)
     }
 

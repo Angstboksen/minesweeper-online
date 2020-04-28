@@ -83,7 +83,7 @@ export class Header extends Component {
     stringifyUsers = () => {
         let txt = ""
         for (let user of this.state.onlineUsers) {
-            txt += user + '\n'
+            txt += user.user + ' : ' + user.game + '\n'
         }
         return txt
     }
@@ -93,7 +93,7 @@ export class Header extends Component {
         return (
             <>
                 <Navbar expand="lg" bg="dark" variant="dark">
-                    <p style={pstyle}>v0.2.0</p>
+                    <p style={pstyle}>v0.2.1</p>
                     <Navbar.Brand href="/">Minesweeper Online</Navbar.Brand>
                     {this.getNavLinks()}
                     <OverlayTrigger

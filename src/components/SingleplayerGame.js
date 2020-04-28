@@ -11,21 +11,34 @@ import { changeDifficulty } from '../actions'
 import HighscoreList from './HighscoreList'
 import axios from 'axios'
 import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
+import { Spinner } from 'react-bootstrap'
 
 
 class SingleplayerGame extends Component {
 
+  state = {
+    board: [],
+    millis: 0,
+    readyToStart: false,
+    loading: true
+  }
 
   constructor(props) {
     super(props)
-    const { difficulty } = this.props
-    this.state = { board: this._tempBoard(difficulty), millis: 0, readyToStart: true }
     this.handleClick = this.handleClick.bind(this)
     this.handleClickCell = this.handleClickCell.bind(this)
     this.handleRightClickCell = this.handleRightClickCell.bind(this)
     this.handleDoubleClickCell = this.handleDoubleClickCell.bind(this)
     this.clock = undefined
     this.allBombPlaces = []
+  }
+
+  componentDidMount() {
+    const { difficulty } = this.props
+    setTimeout(() => {
+      this.setState({ board: this._tempBoard(difficulty), millis: 0, readyToStart: true })
+      this.setState({ loading: false })
+    }, 2000)
   }
 
   _initBoard(difficulty, startX, startY) {
@@ -57,11 +70,10 @@ class SingleplayerGame extends Component {
   }
 
   _tempBoard(difficulty) {
-    const {userId} = this.props.credentials
+    const { userId } = this.props.credentials
     const game_code = randHex()
-    this.setState({readyToStart: true, game_code: game_code}, () => {
-      axios(REQUEST_FUNCTIONS.POST_GAME_INSTANCE(userId, difficulty, this.state.game_code))
-    })
+    this.setState({ readyToStart: true, game_code: game_code })
+    axios(REQUEST_FUNCTIONS.POST_GAME_INSTANCE(userId, difficulty, game_code))
     const { boardWidth, boardHeight } = config[difficulty]
     const board = Array.from(
       new Array(boardWidth), () => new Array(boardHeight).fill(
@@ -99,7 +111,7 @@ class SingleplayerGame extends Component {
     this._stopTimer(true)
     const { difficulty } = this.props
     this.props.dispatch(init())
-    this.setState({ board: this._tempBoard(difficulty)})
+    this.setState({ board: this._tempBoard(difficulty) })
   }
 
   handleClickCell(x, y) {
@@ -108,7 +120,7 @@ class SingleplayerGame extends Component {
     if (gameover || clear || board[x][y].flagged) {
       return
     }
-    if(this.state.readyToStart){this._initBoard(difficulty, x, y)}
+    if (this.state.readyToStart) { this._initBoard(difficulty, x, y) }
     this._open(x, y)
   }
 
@@ -166,11 +178,11 @@ class SingleplayerGame extends Component {
     for (let coords of this.allBombPlaces) {
       const x = coords.x
       const y = coords.y
-          board[x][y] = Object.assign({}, board[x][y], { open: true })
+      board[x][y] = Object.assign({}, board[x][y], { open: true })
     }
-    this.setState({ board }) 
-      this.props.dispatch(gameover())
-    
+    this.setState({ board })
+    this.props.dispatch(gameover())
+
   }
 
   _open(x, y) {
@@ -196,7 +208,7 @@ class SingleplayerGame extends Component {
     board[x][y] = Object.assign({}, board[x][y], { open: true, bombCount: bombCount })
     axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount))
     this.setState({ board })
-    
+
     if (board[x][y].bomb) {
       this._stopTimer()
       this.showAllBombs()
@@ -278,11 +290,11 @@ class SingleplayerGame extends Component {
       this.setState({ millis: currenttime - starttime })
     }, 1)
   }
-  
+
   _startGame = () => {
     this._startTimer()
     //User now active
-    const { userId, googleId, useremail} = this.props.credentials
+    const { userId, googleId, useremail } = this.props.credentials
     axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, true))
   }
 
@@ -296,6 +308,7 @@ class SingleplayerGame extends Component {
     //User now inactive
     const { userId, googleId, useremail } = this.props.credentials
     axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, false))
+    axios(REQUEST_FUNCTIONS.DELETE_GAME(this.state.game_code))
   }
 
   formatClockValue = (type) => {
@@ -324,7 +337,7 @@ class SingleplayerGame extends Component {
   }
 
   render() {
-    const { board, gameIsRunning } = this.state
+    const { board, gameIsRunning, loading } = this.state
     const { difficulty, credentials } = this.props
     const { boardWidth, cellSize } = config[difficulty]
     const boardWidthPx = boardWidth * cellSize
@@ -350,75 +363,78 @@ class SingleplayerGame extends Component {
           origin="singleplayer"
         />
 
-        <div>
-          <h1>Minesweeper Singleplayer</h1>
-          <h2>{status}</h2>
-          <h5>Time</h5>
-          <div className="clock">
-            <div className="clockWrapper">
-              <div className="minutes">
-                <div className="first">
-                  <div className="number">{this.formatClockValue("minutes")}</div>
-                </div>
-              </div>
-              <div className="tick">:</div>
-              <div className="seconds">
-                <div className="first">
-                  <div className="number">{this.formatClockValue("seconds")}</div>
-                </div>
-              </div>
-              <div className="tick">.</div>
-              <div className="millis">
-                <div className="first">
-                  <div className="number">{this.formatClockValue("millis")}</div>
+        {loading ? <Spinner style={{margin: '20vh 50vw'}}animation="border" variant="danger" /> :
+          <div>
+            <div>
+              <h1>Minesweeper Singleplayer</h1>
+              <h2>{status}</h2>
+              <h5>Time</h5>
+              <div className="clock">
+                <div className="clockWrapper">
+                  <div className="minutes">
+                    <div className="first">
+                      <div className="number">{this.formatClockValue("minutes")}</div>
+                    </div>
+                  </div>
+                  <div className="tick">:</div>
+                  <div className="seconds">
+                    <div className="first">
+                      <div className="number">{this.formatClockValue("seconds")}</div>
+                    </div>
+                  </div>
+                  <div className="tick">.</div>
+                  <div className="millis">
+                    <div className="first">
+                      <div className="number">{this.formatClockValue("millis")}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div id="menu">
-            <button onClick={this.handleClick} id="restart">Restart</button>
-            <select value={this.props.difficulty} onChange={(e) => this.changeDifficulty(e)} style={{ marginRight: 5 }}>
-              <option value={'easy'} key={'easy'}>Easy</option>
-              <option value={'normal'} key={'normal'}>Normal</option>
-              <option value={'hard'} key={'hard'}>Hard</option>
-              <option value={'veryHard'} key={'veryHard'}>Very Hard</option>
-              <option value={'maniac'} key={'maniac'}>Maniac</option>
-            </select>
-            <span id="bomb"><GiFireBomb style={{ marginTop: -3 }} /> {this.props.bomb}</span>
-          </div>
-          <div id="gamehighscorewrapper">
-            <Game
-              board={board}
-              cellSize={cellSize}
-              difficulty={difficulty}
-              boardWidthPx={boardWidthPx}
-              handleClick={this.handleClick}
-              handleClickCell={this.handleClickCell}
-              handleRightClickCell={this.handleRightClickCell}
-              handleDoubleClickCell={this.handleDoubleClickCell} />
-            <HighscoreList
-              highscores={credentials.highscores[difficulty]}
-              highscoresloaded={credentials.highscores.loaded}
-              credentials={this.props.credentials}
-              difficulty={difficulty}
-              isGlobalHighscoreList={false}
-            />
-            <HighscoreList
-              highscores={credentials.globalhighscores[difficulty]}
-              highscoresloaded={credentials.globalhighscores.loaded}
-              credentials={this.props.credentials}
-              difficulty={difficulty}
-              isGlobalHighscoreList={true}
-            />
-          </div>
-        </div>
+            <div id="menu">
+              <button onClick={this.handleClick} id="restart">Restart</button>
+              <select value={this.props.difficulty} onChange={(e) => this.changeDifficulty(e)} style={{ marginRight: 5 }}>
+                <option value={'easy'} key={'easy'}>Easy</option>
+                <option value={'normal'} key={'normal'}>Normal</option>
+                <option value={'hard'} key={'hard'}>Hard</option>
+                <option value={'veryHard'} key={'veryHard'}>Very Hard</option>
+                <option value={'maniac'} key={'maniac'}>Maniac</option>
+              </select>
+              <span id="bomb"><GiFireBomb style={{ marginTop: -3 }} /> {this.props.bomb}</span>
+            </div>
+            <div id="gamehighscorewrapper">
+              <Game
+                board={board}
+                cellSize={cellSize}
+                difficulty={difficulty}
+                boardWidthPx={boardWidthPx}
+                handleClick={this.handleClick}
+                handleClickCell={this.handleClickCell}
+                handleRightClickCell={this.handleRightClickCell}
+                handleDoubleClickCell={this.handleDoubleClickCell} />
+              <HighscoreList
+                highscores={credentials.highscores[difficulty]}
+                highscoresloaded={credentials.highscores.loaded}
+                credentials={this.props.credentials}
+                difficulty={difficulty}
+                isGlobalHighscoreList={false}
+              />
+              <HighscoreList
+                highscores={credentials.globalhighscores[difficulty]}
+                highscoresloaded={credentials.globalhighscores.loaded}
+                credentials={this.props.credentials}
+                difficulty={difficulty}
+                isGlobalHighscoreList={true}
+              />
+            </div>
+          </div>}
       </div>
     )
   }
 }
 
 function randHex() {
-  return Math.floor(Math.random()*16777215).toString(16)
+  return Math.floor(Math.random() * 16777215).toString(16)
 }
 
 const mapStateToProps = (state) => state.game

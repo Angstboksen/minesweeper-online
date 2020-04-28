@@ -17,7 +17,8 @@ export const DEFAULT_WRAPPER_STATE = {
     loaded : false,
     highscores : DEFAULT_EMPTY_HIGHSCORES,
     globalhighscores : DEFAULT_EMPTY_HIGHSCORES,
-    difficulty: 'easy'
+    difficulty: 'easy',
+    game_code: undefined
 }
 
 export const DIFF_COLORS = {

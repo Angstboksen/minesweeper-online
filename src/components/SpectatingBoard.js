@@ -32,7 +32,7 @@ export class SpectatingBoard extends Component {
 
     _getGame = async () => {
         // const {game_code} = this.props
-        const res = await axios(REQUEST_FUNCTIONS.GET_GAME_INSTANCE('balle'))
+        const res = await axios(REQUEST_FUNCTIONS.GET_GAME_INSTANCE('290fa9'))
         console.log(res.data)
         this.setState({ game: res.data, board: this._tempBoard(res.data.difficulty), difficulty: res.data.difficulty }, () => {
             this.interval = setInterval(() => {
@@ -43,7 +43,7 @@ export class SpectatingBoard extends Component {
 
     _fetchBoard = async () => {
         //const {game_code} = this.props
-        const res = await axios(REQUEST_FUNCTIONS.GET_GAME_COORDINATES('balle'))
+        const res = await axios(REQUEST_FUNCTIONS.GET_GAME_COORDINATES('290fa9'))
         console.log(res.data)
         this._updateBoard(res.data)
     }

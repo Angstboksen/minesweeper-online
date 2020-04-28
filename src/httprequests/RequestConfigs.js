@@ -208,12 +208,13 @@ function GET_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord) {
 }
 
 //Getting a coordinates instance for a spesific game
-function CHANGE_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged, bomb_count) {
+function CHANGE_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, opened, flagged, bomb_count) {
   const data = {
     'x_coord': x_coord,
     'y_coord': y_coord,
     'flagged': flagged,
-    'bomb_count': bomb_count
+    'bomb_count': bomb_count,
+    'opened': opened,
   }
   const options = {
     method: 'PUT',

@@ -57,7 +57,11 @@ class SingleplayerGame extends Component {
   }
 
   _tempBoard(difficulty) {
-    this.setState({readyToStart: true})
+    const {userId} = this.props.credentials
+    const game_code = randHex()
+    this.setState({readyToStart: true, game_code: game_code}, () => {
+      axios(REQUEST_FUNCTIONS.POST_GAME_INSTANCE(userId, difficulty, this.state.game_code))
+    })
     const { boardWidth, boardHeight } = config[difficulty]
     const board = Array.from(
       new Array(boardWidth), () => new Array(boardHeight).fill(
@@ -66,9 +70,6 @@ class SingleplayerGame extends Component {
     )
     return board
   }
-
-
-
 
   _initBombPlaces(difficulty, startX, startY) {
     const bombPlaces = []
@@ -113,7 +114,6 @@ class SingleplayerGame extends Component {
 
   handleRightClickCell(x, y) {
     const { gameover, clear } = this.props
-    console.log(this.state.board[x][y])
     if (gameover || clear || this.state.board[x][y].open) {
       return
     }
@@ -175,7 +175,7 @@ class SingleplayerGame extends Component {
 
   _open(x, y) {
     const board = [].concat(this.state.board)
-    if (board[x][y].open) {
+    if (board[x][y].open || board[x][y].flagged) {
       return
     }
 
@@ -194,10 +194,9 @@ class SingleplayerGame extends Component {
       }
     }
     board[x][y] = Object.assign({}, board[x][y], { open: true, bombCount: bombCount })
+    axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount))
     this.setState({ board })
-    if (board[x][y].flagged) {
-      this._toggleFlag(x, y)
-    }
+    
     if (board[x][y].bomb) {
       this._stopTimer()
       this.showAllBombs()
@@ -239,7 +238,7 @@ class SingleplayerGame extends Component {
       })
     })
     if (openCount === 1) {
-      this._startTimer()
+      this._startGame()
     }
     return openCount === (boardWidth * boardHeight - bombNum)
   }
@@ -248,6 +247,7 @@ class SingleplayerGame extends Component {
     const board = [].concat(this.state.board)
     const { flagged } = board[x][y]
     board[x][y] = Object.assign({}, board[x][y], { flagged: !flagged })
+    axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, false, !flagged, 0))
     this.setState({ board })
     this.props.dispatch(toggle(!flagged))
   }
@@ -277,8 +277,12 @@ class SingleplayerGame extends Component {
       let currenttime = Date.now()
       this.setState({ millis: currenttime - starttime })
     }, 1)
+  }
+  
+  _startGame = () => {
+    this._startTimer()
     //User now active
-    const { userId, googleId, useremail } = this.props.credentials
+    const { userId, googleId, useremail} = this.props.credentials
     axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, true))
   }
 
@@ -411,6 +415,10 @@ class SingleplayerGame extends Component {
       </div>
     )
   }
+}
+
+function randHex() {
+  return Math.floor(Math.random()*16777215).toString(16)
 }
 
 const mapStateToProps = (state) => state.game

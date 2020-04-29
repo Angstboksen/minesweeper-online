@@ -70,6 +70,14 @@ export class Header extends Component {
                         <Nav.Link href="/singleplayer">Singleplayer</Nav.Link>
                     </Nav>
                 )
+            case "spectate":
+                return (
+                    <Nav className="mr-auto">
+                        <Nav.Link href="/">Home</Nav.Link>
+                        <Nav.Link href="/singleplayer">Singleplayer</Nav.Link>
+                        <Nav.Link href="/multiplayer">Multiplayer</Nav.Link>
+                    </Nav>
+                )
             default:
                 return (
                     <Nav className="mr-auto">

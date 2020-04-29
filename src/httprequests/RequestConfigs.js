@@ -182,6 +182,20 @@ function POST_GAME_INSTANCE(userid, difficulty, game_code) {
   return options
 }
 
+//Putting a spesific game instance
+function CHANGE_GAME_INSTANCE(game_code, game_time) {
+  const data = {
+    'game_time': game_time
+  }
+  const options = {
+    method: 'PUT',
+    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    data: data,
+    url: FORMAT_URL(`spectatedgames/${game_code}/`),
+  }
+  return options
+}
+
 //Getting the coordinates for a spesific game
 function GET_GAME_COORDINATES(game_code) {
   const options = {
@@ -226,12 +240,13 @@ function CHANGE_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, opened, f
 }
 
 //Posting a new coordinate instance
-function POST_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged, bomb_count) {
+function POST_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, flagged, bomb_count, gameover) {
   const data = {
     'x_coord': x_coord,
     'y_coord': y_coord,
     'flagged': flagged,
-    'bomb_count': bomb_count
+    'bomb_count': bomb_count,
+    'gameover': gameover
   }
   const options = {
     method: 'POST',
@@ -273,7 +288,8 @@ const REQUEST_FUNCTIONS = {
   POST_COORDINATES_INSTANCE: POST_GAME_COORDINATES_INSTANCE,
   GET_GAME_INSTANCE: GET_GAME_INSTANCE,
   POST_GAME_INSTANCE: POST_GAME_INSTANCE,
-  DELETE_GAME: DELETE_GAME
+  DELETE_GAME: DELETE_GAME,
+  CHANGE_GAME_INSTANCE: CHANGE_GAME_INSTANCE
 }
 
 export default REQUEST_FUNCTIONS

@@ -182,7 +182,7 @@ class SingleplayerGame extends Component {
     }
     this.setState({ board })
     this.props.dispatch(gameover())
-
+    axios(REQUEST_FUNCTIONS.CHANGE_GAME_INSTANCE(this.state.game_code, this.state.millis))
   }
 
   _open(x, y) {
@@ -205,8 +205,8 @@ class SingleplayerGame extends Component {
         }
       }
     }
+    axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount, board[x][y].bomb))
     board[x][y] = Object.assign({}, board[x][y], { open: true, bombCount: bombCount })
-    axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount))
     this.setState({ board })
 
     if (board[x][y].bomb) {
@@ -284,6 +284,7 @@ class SingleplayerGame extends Component {
 
   _startTimer = () => {
     let starttime = Date.now()
+    axios(REQUEST_FUNCTIONS.CHANGE_GAME_INSTANCE(this.state.game_code, starttime))
     this.setState({ gameIsRunning: true, starttime: starttime, millis: 0 })
     this.clock = setInterval(() => {
       let currenttime = Date.now()
@@ -308,7 +309,14 @@ class SingleplayerGame extends Component {
     //User now inactive
     const { userId, googleId, useremail } = this.props.credentials
     axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, false))
-    axios(REQUEST_FUNCTIONS.DELETE_GAME(this.state.game_code))
+    //axios(REQUEST_FUNCTIONS.DELETE_GAME(this.state.game_code))
+  }
+
+  changeDifficulty(e) {
+    const difficulty = e.target.value
+    this.props._updateDifficulty(difficulty)
+    this.props.dispatch(changeDifficulty(difficulty))
+    this.updateBoard(difficulty)
   }
 
   formatClockValue = (type) => {
@@ -327,13 +335,6 @@ class SingleplayerGame extends Component {
       default:
         return 0
     }
-  }
-
-  changeDifficulty(e) {
-    const difficulty = e.target.value
-    this.props._updateDifficulty(difficulty)
-    this.props.dispatch(changeDifficulty(difficulty))
-    this.updateBoard(difficulty)
   }
 
   render() {

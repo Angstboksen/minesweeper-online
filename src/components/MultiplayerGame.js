@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
 import axios from 'axios'
-import SpectatingBoard from './SpectatingBoard'
 
 export class MultiplayerGame extends Component {
 
@@ -38,11 +37,6 @@ export class MultiplayerGame extends Component {
         //this.props.history.push(`multiplayer/${randhex}`)
     }
 
-    _spectate = () => {
-        let code = document.getElementById("spec").value
-        this.setState({game_code: code})
-    }
-
     render() {
         return (
             <div style={{ width: "100%" }}>
@@ -68,9 +62,6 @@ export class MultiplayerGame extends Component {
                         <Button variant="primary" type="submit">Create game</Button>
                     </Form>
                 </div>
-                Enter game code: <input type="text" id="spec" />
-                <button onClick={this._spectate}>Spectate</button>
-                {this.state.game_code !== 'default' && <SpectatingBoard difficulty={this.props.credentials.difficulty} game_code={this.state.game_code}/>}
             </div>
         )
     }

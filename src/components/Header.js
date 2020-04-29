@@ -43,7 +43,7 @@ export class Header extends Component {
         this.getUsersFromApi()
         return setInterval(async () => {
             this.getUsersFromApi()
-        }, 4000)
+        }, 2000)
     }
 
     getNavLinks = () => {
@@ -88,6 +88,10 @@ export class Header extends Component {
         return txt
     }
 
+    gotoSpectate = () => {
+        this.props.history.push("/spectate")
+    }
+
     getContent = () => {
         const { isSignedIn, userimageurl } = this.props.credentials
         return (
@@ -103,7 +107,7 @@ export class Header extends Component {
                             <Tooltip id={`tooltip-bottom`}>
                                 <strong style={{ whiteSpace: 'pre-line' }}>{this.stringifyUsers()}</strong>
                             </Tooltip>}>
-                        <Button variant="secondary">Players in game: {this.state.onlineCount}</Button>
+                        <Button onClick={this.gotoSpectate} variant="secondary">Players in game: {this.state.onlineCount}</Button>
                     </OverlayTrigger>{' '}
                     {isSignedIn &&
                         <>

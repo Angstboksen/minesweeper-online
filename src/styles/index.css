@@ -23,6 +23,14 @@ h3 {
     margin-right: 20px;
 }
 
+.spectatingboard {
+    margin-right: 200px !important;
+}
+
+.online_user_item {
+    margin-right: 20px;
+}
+
 #onlineusers {
     display: inline;
     color: white;
@@ -56,8 +64,14 @@ a:hover {
     text-align: center !important;
 }
 
-#highscoreroot {
+.highscoreroot {
     margin: 70px 10px;
+    display: inline-block !important;
+    width: 20vw;
+}
+
+.onlineusersroot {
+    margin: 5vh 4vw;
     display: inline-block !important;
     width: 20vw;
 }

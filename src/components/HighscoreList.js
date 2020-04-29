@@ -20,7 +20,7 @@ export class HighscoreList extends Component {
     render() {
         const { difficulty, highscores, credentials, highscoresloaded, isGlobalHighscoreList } = this.props
         const isGlobal = isGlobalHighscoreList
-        return credentials.isSignedIn ? (<div id="highscoreroot">
+        return credentials.isSignedIn ? (<div className="highscoreroot">
             {isGlobalHighscoreList ?
                 <h3>Leaderbords for <span style={{ color: DIFF_COLORS[difficulty] }}>{difficulty.toUpperCase()}</span></h3> :
                 <h3>Personal highscores!</h3>}

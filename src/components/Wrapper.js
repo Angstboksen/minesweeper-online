@@ -7,6 +7,7 @@ import { DEFAULT_WRAPPER_STATE } from '../constants'
 import axios from 'axios'
 import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
 import { DEFAULT_EMPTY_HIGHSCORES } from '../constants'
+import SpectatePage from './SpectatePage';
 
 
 class Wrapper extends Component {
@@ -60,6 +61,12 @@ class Wrapper extends Component {
         return highscores.sort(function (a, b) {
             return a.game_time - b.game_time;
         })
+    }
+    
+    getOnlineUsers = async () => {
+        const res = await axios(REQUEST_FUNCTIONS.GET_ONLINE_USERS())
+        const users = res.data
+        this.setState({online_users: users})
     }
 
     getHighscores = async () => {
@@ -139,7 +146,8 @@ class Wrapper extends Component {
                                 credentials={this.state}
                                 _login={this._login}
                                 _loginerror={this._loginerror}
-                                _resetState={this._resetState} />
+                                _resetState={this._resetState}
+                                getOnlineUsers={this.getOnlineUsers} />
                         </Route>
                         <Route path="/singleplayer">
                             <SingleplayerGame
@@ -148,7 +156,8 @@ class Wrapper extends Component {
                                 _loginerror={this._loginerror}
                                 _resetState={this._resetState}
                                 _saveGame={this._saveGame}
-                                _updateDifficulty={this._updateDifficulty} />
+                                _updateDifficulty={this._updateDifficulty}
+                                getOnlineUsers={this.getOnlineUsers} />
                         </Route>
                         <Route exact path="/multiplayer">
                             <MultiplayerGame
@@ -157,7 +166,15 @@ class Wrapper extends Component {
                                 _loginerror={this._loginerror}
                                 _resetState={this._resetState}
                                 _saveGame={this._saveGame}
-                                _updateDifficulty={this._updateDifficulty} />
+                                _updateDifficulty={this._updateDifficulty}
+                                getOnlineUsers={this.getOnlineUsers} />
+                        </Route>
+                        <Route exact path="/spectate">
+                            <SpectatePage
+                                credentials={this.state}
+                                _login={this._login}
+                                _loginerror={this._loginerror}
+                                _resetState={this._resetState}/>
                         </Route>
                     </Switch>
                 </>

@@ -45,6 +45,11 @@ export class SpectatingBoard extends Component {
     }
 
     _fetchBoard = async () => {
+        if(this.props.reloadGame) {
+            clearInterval(this.interval)
+            this._getGame()
+            return
+        }
         const {game_code} = this.props
         const res = await axios(REQUEST_FUNCTIONS.GET_GAME_COORDINATES(game_code))
         this._updateBoard(res.data)
@@ -52,6 +57,7 @@ export class SpectatingBoard extends Component {
 
     _updateBoard = (coords) => {
         let board = [].concat(this.state.board)
+        console.log(board)
         for (let coord of coords) {
             const x = coord.x_coord
             const y = coord.y_coord

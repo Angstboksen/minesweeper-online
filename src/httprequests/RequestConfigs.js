@@ -2,7 +2,7 @@ import __MASTER_TOKEN__ from './Mastertoken.js'
 
 
 const BASE_URL = 'http://85.164.49.124:8000/'
-//const BASE_URL = 'http://localhost:8000/'
+//const BASE_URL = 'http://localhost:8001/'
 
 const FORMAT_URL = (path) => {
   return BASE_URL + path
@@ -222,13 +222,14 @@ function GET_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord) {
 }
 
 //Getting a coordinates instance for a spesific game
-function CHANGE_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, opened, flagged, bomb_count) {
+function CHANGE_GAME_COORDINATES_INSTANCE(game_code, x_coord, y_coord, opened, flagged, bomb_count, gameover = false) {
   const data = {
     'x_coord': x_coord,
     'y_coord': y_coord,
     'flagged': flagged,
     'bomb_count': bomb_count,
     'opened': opened,
+    'gameover': gameover
   }
   const options = {
     method: 'PUT',

@@ -210,12 +210,14 @@ class SingleplayerGame extends Component {
     this.setState({ board })
 
     if (board[x][y].bomb) {
+      axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount, board[x][y].bomb, true))
       this._stopTimer()
       this.showAllBombs()
       this.props._saveGame(this.state.millis, this.props.difficulty, false)
       return
     }
     if (this._isClear(board)) {
+      axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount, board[x][y].bomb, true))
       this._stopTimer()
       this.props.dispatch(clear())
       this.props._saveGame(this.state.millis, this.props.difficulty, true)
@@ -300,6 +302,7 @@ class SingleplayerGame extends Component {
   }
 
   _stopTimer = (reset = false) => {
+    
     if (reset) {
       this.setState({ gameIsRunning: false, millis: 0 })
     } else {

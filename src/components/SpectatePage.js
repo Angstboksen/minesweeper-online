@@ -57,7 +57,7 @@ export class SpectatePage extends Component {
                     getOnlineUsers={this.props.getOnlineUsers}
                     origin="spectate" />
                 {loading ? <Spinner style={{ margin: '20vh 50vw' }} animation="border" variant="danger" /> : <div>
-                    <h1>Spectatating game</h1>
+                    <h1>Spectating game</h1>
 
                     <div className='onlineusersroot'>
                         <h3>Users currently in game</h3>

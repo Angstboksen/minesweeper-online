@@ -105,7 +105,7 @@ export class Header extends Component {
         return (
             <>
                 <Navbar expand="lg" bg="dark" variant="dark">
-                    <p style={pstyle}>v0.3.1</p>
+                    <p style={pstyle}>v0.3.2</p>
                     <Navbar.Brand href="/">Minesweeper Online</Navbar.Brand>
                     {this.getNavLinks()}
                     <OverlayTrigger

@@ -78,10 +78,10 @@ export class SpectatePage extends Component {
                         </ListGroup>
                     </div>
                     {current_game !== undefined ?
-                        <div style={{ margin: '0 35vw' }}>
-                            <h4>Spectating <b>{current_game.user}</b> playing a game with difficulty <span style={{ color: DIFF_COLORS[current_game.difficulty] }}>{current_game.difficulty}</span> | Game code: <b>{current_game.game_code}</b></h4>
+                        <div style={{ margin: '0 auto', textAlign: 'center' }}>
+                            <h4 >Spectating <b>{current_game.user}</b> playing a game with difficulty <span style={{ color: DIFF_COLORS[current_game.difficulty] }}>{current_game.difficulty}</span> | Game code: <b>{current_game.game_code}</b></h4>
 
-                            <span><SpectatingBoard difficulty={current_game.difficulty} game_code={current_game.game_code} online_users={online_users} /></span>
+                            <SpectatingBoard difficulty={current_game.difficulty} game_code={current_game.game_code} online_users={online_users} />
                         </div> : null}
                 </div>}
             </div>

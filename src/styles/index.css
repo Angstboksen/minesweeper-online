@@ -70,6 +70,10 @@ a:hover {
     width: 20vw;
 }
 
+.spectateboard {
+    margin: 5vh 18vw 0 0;
+}
+
 .onlineusersroot {
     margin: 5vh 4vw;
     display: inline-block !important;

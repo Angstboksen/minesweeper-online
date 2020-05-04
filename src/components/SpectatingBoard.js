@@ -92,7 +92,7 @@ export class SpectatingBoard extends Component {
     }
 
     _startTimer = () => {
-        this.setState({gameover: false})
+        this.setState({ gameover: false })
         this.clock = setInterval(() => {
             let currenttime = Date.now()
             this.setState({ millis: currenttime - this.state.starttime })
@@ -102,16 +102,17 @@ export class SpectatingBoard extends Component {
     _stopTimer = async () => {
         const res = await axios(REQUEST_FUNCTIONS.GET_GAME_INSTANCE(this.props.game_code))
         const endtime = res.data.game_time
-        this.setState({millis: endtime, gameover: true})
+        this.setState({ millis: endtime, gameover: true })
         clearInterval(this.clock)
     }
 
     render() {
         const { board, difficulty, flagCount, gameover } = this.state
         const { cellSize, boardWidth, bombNum } = config[difficulty]
+        const boardWidthPx = boardWidth * cellSize
         return (
             <div>
-                {gameover ? <h2 style={{color: 'red'}}>GAMEOVER!</h2> : <h2 style={{color: 'blue'}}>Ongoing</h2>}
+                {gameover ? <h2 style={{ color: 'red' }}>GAMEOVER!</h2> : <h2 style={{ color: 'blue' }}>Ongoing</h2>}
                 <h5>Time</h5>
                 <div className="clock">
                     <div className="clockWrapper">
@@ -139,7 +140,7 @@ export class SpectatingBoard extends Component {
                     board={board}
                     cellSize={cellSize}
                     difficulty={difficulty}
-                    boardWidthPx={boardWidth}
+                    boardWidthPx={boardWidthPx}
                     handleClick={() => { }}
                     handleClickCell={() => { }}
                     handleRightClickCell={() => { }}

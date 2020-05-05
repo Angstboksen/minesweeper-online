@@ -67,6 +67,9 @@ export class SpectatingBoard extends Component {
         let board = [].concat(this.state.board)
         let flagCount = 0
         for (let coord of coords) {
+            const x0 = coord.x_coord
+            const y0 = coord.y_coord
+            if(board[x0][y0].flagged === coord.flagged && board[x0][y0].open === coord.opened) continue
             flagCount += coord.flagged
             const x = coord.x_coord
             const y = coord.y_coord

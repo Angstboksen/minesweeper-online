@@ -54,8 +54,10 @@ export class SpectatingBoard extends Component {
     _fetchBoard = async () => {
         const { game_code, online_users } = this.props
         const res = await axios(REQUEST_FUNCTIONS.GET_GAME_COORDINATES(game_code))
-        if (res.data.length > 0 && online_users.length > 0) {
-            this._updateBoard(res.data)
+        const coords = res.data
+        const last_coord = coords[coords.length -1]
+        if (!last_coord.gameover || online_users.length <= 0) {
+            this._updateBoard(coords)
         } else {
             this._stopTimer()
         }
@@ -104,6 +106,7 @@ export class SpectatingBoard extends Component {
         const endtime = res.data.game_time
         this.setState({ millis: endtime, gameover: true })
         clearInterval(this.clock)
+        clearInterval(this.interval)
     }
 
     render() {

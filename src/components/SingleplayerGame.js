@@ -70,10 +70,12 @@ class SingleplayerGame extends Component {
   }
 
   _tempBoard(difficulty) {
-    const { userId } = this.props.credentials
+    const { userId, isSignedIn } = this.props.credentials
     const game_code = randHex()
     this.setState({ readyToStart: true, game_code: game_code })
-    axios(REQUEST_FUNCTIONS.POST_GAME_INSTANCE(userId, difficulty, game_code))
+    if (isSignedIn) {
+      axios(REQUEST_FUNCTIONS.POST_GAME_INSTANCE(userId, difficulty, game_code))
+    }
     const { boardWidth, boardHeight } = config[difficulty]
     const board = Array.from(
       new Array(boardWidth), () => new Array(boardHeight).fill(
@@ -182,7 +184,9 @@ class SingleplayerGame extends Component {
     }
     this.setState({ board })
     this.props.dispatch(gameover())
-    axios(REQUEST_FUNCTIONS.CHANGE_GAME_INSTANCE(this.state.game_code, this.state.millis))
+    if (this.props.credentials.isSignedIn) {
+      axios(REQUEST_FUNCTIONS.CHANGE_GAME_INSTANCE(this.state.game_code, this.state.millis))
+    }
   }
 
   _open(x, y) {
@@ -205,19 +209,20 @@ class SingleplayerGame extends Component {
         }
       }
     }
-    axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount, board[x][y].bomb))
+    const isBomb = board[x][y].bomb
+    if (this.props.credentials.isSignedIn) {
+      axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount, isBomb))
+    }
     board[x][y] = Object.assign({}, board[x][y], { open: true, bombCount: bombCount })
     this.setState({ board })
 
-    if (board[x][y].bomb) {
-      axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount, board[x][y].bomb, true))
+    if (isBomb) {
       this._stopTimer()
       this.showAllBombs()
       this.props._saveGame(this.state.millis, this.props.difficulty, false)
       return
     }
     if (this._isClear(board)) {
-      axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, true, false, bombCount, board[x][y].bomb, true))
       this._stopTimer()
       this.props.dispatch(clear())
       this.props._saveGame(this.state.millis, this.props.difficulty, true)
@@ -261,7 +266,9 @@ class SingleplayerGame extends Component {
     const board = [].concat(this.state.board)
     const { flagged } = board[x][y]
     board[x][y] = Object.assign({}, board[x][y], { flagged: !flagged })
-    axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, false, !flagged, 0))
+    if (this.props.credentials.isSignedIn) {
+      axios(REQUEST_FUNCTIONS.CHANGE_COORDINATES_INSTANCE(this.state.game_code, x, y, false, !flagged, 0))
+    }
     this.setState({ board })
     this.props.dispatch(toggle(!flagged))
   }
@@ -286,7 +293,9 @@ class SingleplayerGame extends Component {
 
   _startTimer = () => {
     let starttime = Date.now()
-    axios(REQUEST_FUNCTIONS.CHANGE_GAME_INSTANCE(this.state.game_code, starttime))
+    if (this.props.credentials.isSignedIn) {
+      axios(REQUEST_FUNCTIONS.CHANGE_GAME_INSTANCE(this.state.game_code, starttime))
+    }
     this.setState({ gameIsRunning: true, starttime: starttime, millis: 0 })
     this.clock = setInterval(() => {
       let currenttime = Date.now()
@@ -298,11 +307,13 @@ class SingleplayerGame extends Component {
     this._startTimer()
     //User now active
     const { userId, googleId, useremail } = this.props.credentials
-    axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, true))
+    if (this.props.credentials.isSignedIn) {
+      axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, true))
+    }
   }
 
   _stopTimer = (reset = false) => {
-    
+
     if (reset) {
       this.setState({ gameIsRunning: false, millis: 0 })
     } else {
@@ -311,8 +322,9 @@ class SingleplayerGame extends Component {
     clearInterval(this.clock)
     //User now inactive
     const { userId, googleId, useremail } = this.props.credentials
-    axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, false))
-    //axios(REQUEST_FUNCTIONS.DELETE_GAME(this.state.game_code))
+    if (this.props.credentials.isSignedIn) {
+      axios(REQUEST_FUNCTIONS.PUT_USER_ONLINE(userId, googleId, useremail, false))
+    }
   }
 
   changeDifficulty(e) {
@@ -367,7 +379,7 @@ class SingleplayerGame extends Component {
           origin="singleplayer"
         />
 
-        {loading ? <Spinner style={{margin: '20vh 50vw'}}animation="border" variant="danger" /> :
+        {loading ? <Spinner style={{ margin: '20vh 50vw' }} animation="border" variant="danger" /> :
           <div>
             <div>
               <h1>Minesweeper Singleplayer</h1>

@@ -12,7 +12,46 @@ import HighscoreList from './HighscoreList'
 import axios from 'axios'
 import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
 import { Spinner } from 'react-bootstrap'
+import { Dropdown } from 'semantic-ui-react'
+import Easy from '../images/easy.jpg'
+import Normal from '../images/normal.jpg'
+import Hard from '../images/hard.jpg'
+import VeryHard from '../images/veryhard.jpg'
+import Maniac from '../images/maniac.jpg'
 
+
+const difficultyOptions = [
+  {
+    key: 'easy',
+    text: 'Easy',
+    value: 'easy',
+    image: { avatar: true, src: Easy },
+  },
+  {
+    key: 'normal',
+    text: 'Normal',
+    value: 'normal',
+    image: { avatar: true, src: Normal },
+  },
+  {
+    key: 'hard',
+    text: 'Hard',
+    value: 'hard',
+    image: { avatar: true, src: Hard },
+  },
+  {
+    key: 'veryhard',
+    text: 'Very hard',
+    value: 'veryhard',
+    image: { avatar: true, src: VeryHard },
+  },
+  {
+    key: 'maniac',
+    text: 'Maniac',
+    value: 'maniac',
+    image: { avatar: true, src: Maniac },
+  },
+]
 
 class SingleplayerGame extends Component {
 
@@ -42,7 +81,6 @@ class SingleplayerGame extends Component {
   }
 
   _initBoard(difficulty, startX, startY) {
-    // this.bombPlaces = this._initBombPlaces(difficulty, startX, startY)
     const board = this.state.board
     const { boardWidth, boardHeight, bombNum } = config[difficulty]
 
@@ -327,8 +365,19 @@ class SingleplayerGame extends Component {
     }
   }
 
+  _extractDiff = (target) => {
+    const amount = target.childNodes.length
+    let string;
+    if (amount === 1) {
+      string = target.childNodes[0].textContent.toLowerCase()
+    } else {
+      string = target.childNodes[1].childNodes[0].textContent.toLowerCase()
+    }
+    return string.replace(/\s+/g, '')
+  }
+
   changeDifficulty(e) {
-    const difficulty = e.target.value
+    let difficulty = this._extractDiff(e)
     this.props._updateDifficulty(difficulty)
     this.props.dispatch(changeDifficulty(difficulty))
     this.updateBoard(difficulty)
@@ -382,9 +431,11 @@ class SingleplayerGame extends Component {
         {loading ? <Spinner style={{ margin: '20vh 50vw' }} animation="border" variant="danger" /> :
           <div>
             <div>
-              <h1>Minesweeper Singleplayer</h1>
-              <h2>{status}</h2>
-              <h5>Time</h5>
+              <h1 style={{ width: '100%', margin: '0 auto' }} className="ui icon header">
+                <i aria-hidden="true" className="bomb icon"></i>
+                    Singleplayer game
+                </h1>
+              <h3>{status}</h3>
               <div className="clock">
                 <div className="clockWrapper">
                   <div className="minutes">
@@ -408,40 +459,47 @@ class SingleplayerGame extends Component {
               </div>
             </div>
             <div id="menu">
-              <button onClick={this.handleClick} id="restart">Restart</button>
-              <select value={this.props.difficulty} onChange={(e) => this.changeDifficulty(e)} style={{ marginRight: 5 }}>
-                <option value={'easy'} key={'easy'}>Easy</option>
-                <option value={'normal'} key={'normal'}>Normal</option>
-                <option value={'hard'} key={'hard'}>Hard</option>
-                <option value={'veryHard'} key={'veryHard'}>Very Hard</option>
-                <option value={'maniac'} key={'maniac'}>Maniac</option>
-              </select>
-              <span id="bomb"><GiFireBomb style={{ marginTop: -3 }} /> {this.props.bomb}</span>
+              <Dropdown
+                placeholder='Select difficulty'
+                fluid
+                selection
+                defaultValue='easy'
+                onChange={(e) => this.changeDifficulty(e.target)}
+                options={difficultyOptions}
+              />
+              <div id="restart">{gameIsRunning ? <button onClick={this.handleClick} className="ui negative button">Restart game</button> : <button onClick={this.handleClick} className="ui positive button">Start game</button>}</div>
+              <span className="bomb">Bombs left: <GiFireBomb style={{ marginTop: -3 }} /> {this.props.bomb}</span>
             </div>
             <div id="gamehighscorewrapper">
-              <Game
-                board={board}
-                cellSize={cellSize}
-                difficulty={difficulty}
-                boardWidthPx={boardWidthPx}
-                handleClick={this.handleClick}
-                handleClickCell={this.handleClickCell}
-                handleRightClickCell={this.handleRightClickCell}
-                handleDoubleClickCell={this.handleDoubleClickCell} />
-              <HighscoreList
-                highscores={credentials.highscores[difficulty]}
-                highscoresloaded={credentials.highscores.loaded}
-                credentials={this.props.credentials}
-                difficulty={difficulty}
-                isGlobalHighscoreList={false}
-              />
-              <HighscoreList
-                highscores={credentials.globalhighscores[difficulty]}
-                highscoresloaded={credentials.globalhighscores.loaded}
-                credentials={this.props.credentials}
-                difficulty={difficulty}
-                isGlobalHighscoreList={true}
-              />
+              <div className="singleplayercenter">
+                <Game
+                  board={board}
+                  cellSize={cellSize}
+                  difficulty={difficulty}
+                  boardWidthPx={boardWidthPx}
+                  handleClick={this.handleClick}
+                  handleClickCell={this.handleClickCell}
+                  handleRightClickCell={this.handleRightClickCell}
+                  handleDoubleClickCell={this.handleDoubleClickCell} />
+              </div>
+              <div className="singleplayerleft">
+                <HighscoreList
+                  highscores={credentials.highscores[difficulty]}
+                  highscoresloaded={credentials.highscores.loaded}
+                  credentials={this.props.credentials}
+                  difficulty={difficulty}
+                  isGlobalHighscoreList={false}
+                />
+              </div>
+              <div className="singleplayerright">
+                <HighscoreList
+                  highscores={credentials.globalhighscores[difficulty]}
+                  highscoresloaded={credentials.globalhighscores.loaded}
+                  credentials={this.props.credentials}
+                  difficulty={difficulty}
+                  isGlobalHighscoreList={true}
+                />
+              </div>
             </div>
           </div>}
       </div>

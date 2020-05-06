@@ -1,3 +1,16 @@
+html {
+    overflow-y: overlay;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    margin-top: 20px !important;
+    text-align: center;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -9,10 +22,6 @@ body>#root>div {
     height: 100%;
 }
 
-h3 {
-    text-decoration: underline;
-}
-
 #root {
     background: rgb(240, 240, 240);
 }
@@ -20,15 +29,66 @@ h3 {
 #headerpicture {
     width: 50px;
     height: 50px;
-    margin-right: 20px;
+    margin: 0 25px 0 0;
 }
 
 .spectatingboard {
     margin-right: 200px !important;
 }
 
-.online_user_item {
-    margin-right: 20px;
+.online_user_div {
+    text-align: center;
+    height: 100%;
+    display: inline-block;
+}
+
+#gamehighscorewrapper {
+    /*display: flex;
+    justify-content: space-around;*/
+    width: 100%;
+    margin: 10px auto !important;
+    text-align: center !important;
+}
+
+.singleplayerleft {
+    position: absolute;
+    top: 30vh;
+    left: 3vw;
+}
+
+.singleplayerright {
+    position: absolute;
+    top: 30vh;
+    right: 3vw;
+}
+
+@media screen and (max-width: 1919px) {
+    #gamehighscorewrapper {
+        text-align: center !important;
+    }
+    .singleplayerleft {
+        position: relative;
+        top: 0px;
+        display: inline-block;
+        margin-right: 100px;
+        position: relative;
+    }
+    .singleplayerright {
+        position: relative;
+        top: 0px;
+        display: inline-block;
+        position: relative;
+    }
+}
+
+.userlistgroup {
+    margin: 10px 10px;
+    display: inline-block;
+}
+
+.onlineuseritem {
+    margin: 10px 0;
+    width: 400px;
 }
 
 #onlineusers {
@@ -60,14 +120,10 @@ a:hover {
     display: flex;
 }
 
-#gamehighscorewrapper {
-    text-align: center !important;
-}
-
 .highscoreroot {
-    margin: 70px 10px;
+    margin: 0 10px;
     display: inline-block !important;
-    width: 20vw;
+    width: 19vw;
 }
 
 .spectateboard {
@@ -75,9 +131,9 @@ a:hover {
 }
 
 .onlineusersroot {
-    margin: 5vh 4vw;
-    display: inline-block !important;
-    width: 40vw;
+    /*display: inline-block !important;
+    width: 40vw;*/
+    text-align: center;
 }
 
 .highscorenumber {

@@ -56,10 +56,14 @@ export class SpectatingBoard extends Component {
         const res = await axios(REQUEST_FUNCTIONS.GET_GAME_COORDINATES(game_code))
         const coords = res.data
         const last_coord = coords[coords.length -1]
-        if (!last_coord.gameover || online_users.length <= 0) {
+        if(last_coord === undefined) {
+            return
+        }
+        if (!last_coord.gameover && online_users.length > 0) {
             this._updateBoard(coords)
         } else {
             this._stopTimer()
+            this._setCulprit(last_coord.x_coord, last_coord.y_coord)
         }
     }
 
@@ -74,6 +78,11 @@ export class SpectatingBoard extends Component {
             board[x][y] = Object.assign({}, board[x][y], { open: coord.opened, flagged: coord.flagged, bombCount: coord.bomb_count })
         }
         this.setState({ flagCount: flagCount })
+    }
+
+    _setCulprit = (x, y) => {
+        let board = [].concat(this.state.board)
+        board[x][y] = Object.assign({}, board[x][y], { open: true, bomb: true })
     }
 
     formatClockValue = (type) => {
@@ -105,7 +114,11 @@ export class SpectatingBoard extends Component {
     _stopTimer = async () => {
         const res = await axios(REQUEST_FUNCTIONS.GET_GAME_INSTANCE(this.props.game_code))
         const endtime = res.data.game_time
-        this.setState({ millis: endtime, gameover: true })
+        if(endtime === this.state.starttime) {
+            this.setState({millis: 0, gameover: true})
+        } else {
+            this.setState({ millis: endtime, gameover: true })
+        }
         clearInterval(this.clock)
         clearInterval(this.interval)
     }
@@ -139,7 +152,7 @@ export class SpectatingBoard extends Component {
                         </div>
                     </div>
                 </div>
-                <span id="bomb">Bombs left: <GiFireBomb style={{ marginTop: -3 }} /> {bombNum - flagCount}</span>
+                <span className="bomb">Bombs left: <GiFireBomb style={{ marginTop: -3 }} /> {bombNum - flagCount}</span>
                 <Game
                     board={board}
                     cellSize={cellSize}

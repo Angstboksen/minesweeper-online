@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import Header from './Header';
-import { GoogleLogin} from 'react-google-login'
+import { GoogleLogin } from 'react-google-login'
+
 
 class Home extends Component {
 
@@ -14,10 +15,18 @@ class Home extends Component {
         const { isSignedIn, username } = this.props.credentials
         return isSignedIn ?
             <div>
+                <h1 className="ui icon header huge" >
+                    <i aria-hidden="true" className="home icon"></i>
+                    Home
+                </h1>
                 <p>Hello {username}, you're signed in </p>
             </div>
             :
             <div>
+                <h1 className="ui icon header">
+                    <i aria-hidden="true" className="home icon"></i>
+                    Home
+                </h1>
                 <p>You are not signed in</p>
                 <GoogleLogin
                     clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
@@ -42,7 +51,6 @@ class Home extends Component {
                     history={history}
                     origin="home" />
                 <div>
-                    <h1>Home page</h1>
                     <div style={{ textAlign: "center" }}>
                         {this.getContent()}
                     </div>

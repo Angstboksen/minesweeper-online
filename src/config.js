@@ -20,7 +20,7 @@ const config = {
     bombNum: 99,
     cellSize: 32
   },
-  veryHard: {
+  veryhard: {
     name: "veryhard",
     boardWidth: 48,
     boardHeight: 24,

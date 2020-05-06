@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { GoogleLogin, GoogleLogout } from 'react-google-login'
-import { Navbar, Nav, Form, FormControl, Button, Image, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Navbar, Nav, Button, Image, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import REQUEST_FUNCTIONS from '../httprequests/RequestConfigs'
 import '../styles/index.css'
 
@@ -12,7 +12,7 @@ export class Header extends Component {
         onlineUsers: []
     }
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.interval = this.loadOnlineUsers()
     }
@@ -22,9 +22,9 @@ export class Header extends Component {
     }
 
     _logout = () => {
-        const {useremail} = this.props.credentials
-        let users = this.state.onlineUsers.filter(u => u.email !== useremail )
-        this.setState({onlineUsers : users, onlineCount : this.state.onlineCount - 1})
+        const { useremail } = this.props.credentials
+        let users = this.state.onlineUsers.filter(u => u.email !== useremail)
+        this.setState({ onlineUsers: users, onlineCount: this.state.onlineCount - 1 })
         this.props._resetState()
         this.props.history.push("/")
     }
@@ -105,7 +105,7 @@ export class Header extends Component {
         return (
             <>
                 <Navbar expand="lg" bg="dark" variant="dark">
-                    <p style={pstyle}>v0.3.3</p>
+                    <p style={pstyle}>v0.4.0</p>
                     <Navbar.Brand href="/">Minesweeper Online</Navbar.Brand>
                     {this.getNavLinks()}
                     <OverlayTrigger
@@ -115,35 +115,37 @@ export class Header extends Component {
                             <Tooltip id={`tooltip-bottom`}>
                                 <strong style={{ whiteSpace: 'pre-line' }}>{this.stringifyUsers()}</strong>
                             </Tooltip>}>
-                        <Button onClick={this.gotoSpectate} variant="secondary">Players in game: {this.state.onlineCount}</Button>
+                        <Button style={{ marginRight: 50 }} onClick={this.gotoSpectate} variant="secondary">Players in game: {this.state.onlineCount}</Button>
                     </OverlayTrigger>{' '}
-                    {isSignedIn &&
-                        <>
-                            <Form inline style={{ margin: "0 20px 0 20px" }}>
+                    <div style={{ marginRight: 20 }}>
+                        {isSignedIn &&
+                            <>
+                                {/*<Form inline style={{ margin: "0 20px 0 20px" }}>
                                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                                 <Button variant="outline-info">Search</Button>
-                            </Form>
-                            <Image id="headerpicture" src={userimageurl} roundedCircle />
-                            <GoogleLogout
-                                clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
-                                buttonText="Logout"
-                                onLogoutSuccess={this._logout}
-                            />
-                        </>
-                    }
-                    {
-                        !isSignedIn &&
-                        <>
-                            <GoogleLogin
-                                clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
-                                buttonText="Login with Google"
-                                onSuccess={this._login}
-                                onFailure={this.props._loginerror}
-                                cookiePolicy={'single_host_origin'}
-                                isSignedIn={true}
-                            />
-                        </>
-                    }
+                            </Form>*/}
+                                <Image id="headerpicture" src={userimageurl} roundedCircle />
+                                <GoogleLogout
+                                    clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
+                                    buttonText="Logout"
+                                    onLogoutSuccess={this._logout}
+                                />
+                            </>
+                        }
+                        {
+                            !isSignedIn &&
+                            <>
+                                <GoogleLogin
+                                    clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
+                                    buttonText="Login with Google"
+                                    onSuccess={this._login}
+                                    onFailure={this.props._loginerror}
+                                    cookiePolicy={'single_host_origin'}
+                                    isSignedIn={true}
+                                />
+                            </>
+                        }
+                    </div>
                 </Navbar >
             </>
         )

@@ -3,7 +3,7 @@ export const DEFAULT_EMPTY_HIGHSCORES = {
     "easy": [],
     "normal": [],
     "hard": [],
-    "veryHard": [],
+    "veryhard": [],
     "maniac": [],
     'loaded': false
 }
@@ -25,6 +25,6 @@ export const DIFF_COLORS = {
     "easy": "green",
     "normal": "orange",
     "hard": "tomato",
-    "veryHard": "orangered",
+    "veryhard": "orangered",
     "maniac": "darkslategray",
 }

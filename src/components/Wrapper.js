@@ -80,7 +80,7 @@ class Wrapper extends Component {
             "easy": this.sortHighscores(highscores.filter(h => h.difficulty === 'easy')),
             "normal": this.sortHighscores(highscores.filter(h => h.difficulty === 'normal')),
             "hard": this.sortHighscores(highscores.filter(h => h.difficulty === 'hard')),
-            "veryHard": this.sortHighscores(highscores.filter(h => h.difficulty === 'veryHard')),
+            "veryhard": this.sortHighscores(highscores.filter(h => h.difficulty === 'veryhard')),
             "maniac": this.sortHighscores(highscores.filter(h => h.difficulty === 'maniac')),
             'loaded': true
         }
@@ -94,7 +94,7 @@ class Wrapper extends Component {
             "easy": this.sortHighscores(highscores.filter(h => h.difficulty === 'easy')),
             "normal": this.sortHighscores(highscores.filter(h => h.difficulty === 'normal')),
             "hard": this.sortHighscores(highscores.filter(h => h.difficulty === 'hard')),
-            "veryHard": this.sortHighscores(highscores.filter(h => h.difficulty === 'veryHard')),
+            "veryhard": this.sortHighscores(highscores.filter(h => h.difficulty === 'veryHard')),
             "maniac": this.sortHighscores(highscores.filter(h => h.difficulty === 'maniac')),
             'loaded': true
         }

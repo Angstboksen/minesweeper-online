@@ -29,4 +29,4 @@ jobs:
       run: |
         yarn
         yarn build
-        yarn test
+        yarn test --passWithNoTests

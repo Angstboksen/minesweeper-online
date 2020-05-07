@@ -34,9 +34,12 @@ export class Header extends Component {
     }
 
     getUsersFromApi = async () => {
-        const res = await axios(REQUEST_FUNCTIONS.GET_ONLINE_USERS())
-        const users = res.data
-        this.setState({ onlineCount: users.length, onlineUsers: users })
+        const {token} = this.props.credentials
+        if (token !== undefined) {
+            const res = await axios(REQUEST_FUNCTIONS.GET_ONLINE_USERS(token))
+            const users = res.data
+            this.setState({ onlineCount: users.length, onlineUsers: users })
+        }
     }
 
     loadOnlineUsers = async () => {

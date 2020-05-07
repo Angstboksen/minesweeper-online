@@ -62,11 +62,13 @@ class Wrapper extends Component {
             return a.game_time - b.game_time;
         })
     }
-    
+
     getOnlineUsers = async () => {
-        const res = await axios(REQUEST_FUNCTIONS.GET_ONLINE_USERS())
-        const users = res.data
-        this.setState({online_users: users})
+        if (this.state.token !== undefined) {
+            const res = await axios(REQUEST_FUNCTIONS.GET_ONLINE_USERS(this.state.token))
+            const users = res.data
+            this.setState({ online_users: users })
+        }
     }
 
     getHighscores = async () => {
@@ -174,7 +176,7 @@ class Wrapper extends Component {
                                 credentials={this.state}
                                 _login={this._login}
                                 _loginerror={this._loginerror}
-                                _resetState={this._resetState}/>
+                                _resetState={this._resetState} />
                         </Route>
                     </Switch>
                 </>

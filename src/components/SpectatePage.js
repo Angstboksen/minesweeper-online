@@ -33,9 +33,12 @@ export class SpectatePage extends Component {
     }
 
     _getUsers = async () => {
-        const res = await axios(REQUEST_FUNCTIONS.GET_ONLINE_USERS())
-        const users = res.data
-        this.setState({ online_users: users, loading: false })
+        const { token } = this.props.credentials
+        if (token !== undefined) {
+            const res = await axios(REQUEST_FUNCTIONS.GET_ONLINE_USERS(token))
+            const users = res.data
+            this.setState({ online_users: users, loading: false })
+        }
     }
 
     spectateGame = async (game_code, user, difficulty) => {
@@ -58,14 +61,14 @@ export class SpectatePage extends Component {
                     origin="spectate" />
                 {loading ? <Spinner style={{ margin: '20vh 50vw' }} animation="border" variant="danger" /> : <div>
 
-                <h1 style={{ width: '100%', margin: '0 auto' }} className="ui icon header">
-                <i aria-hidden="true" className="spy icon"></i>
+                    <h1 style={{ width: '100%', margin: '0 auto' }} className="ui icon header">
+                        <i aria-hidden="true" className="spy icon"></i>
                     Spectate a game
                 </h1>
 
                     <div className='onlineusersroot'>
                         <h3>Users currently in game</h3>
-                        {online_users.length > 0 ? <div className="online_user_div"><ListGroup vertical className="userlistgroup">{online_users.map((object, i) => {
+                        {online_users.length > 0 ? <div className="online_user_div"><ListGroup vertical="true" className="userlistgroup">{online_users.map((object, i) => {
                             let user = object.user
                             let game_code = object.game
                             let difficulty = object.difficulty

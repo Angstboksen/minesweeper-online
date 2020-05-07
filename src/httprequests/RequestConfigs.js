@@ -1,7 +1,7 @@
-import __MASTER_TOKEN__ from './Mastertoken.js'
 
+const __MASTER_TOKEN__ = process.env.REACT_APP_MASTER_TOKEN
 
-const BASE_URL = 'http://85.164.49.124:8000/'
+const BASE_URL = process.env.REACT_APP_BASE_URL
 //const BASE_URL = 'http://localhost:8001/'
 
 const FORMAT_URL = (path) => {
@@ -115,10 +115,10 @@ function PUT_USER_ONLINE(id, googleId, email, isOnline) {
 }
 
 //Getting all online users
-function GET_ONLINE_USERS() {
+function GET_ONLINE_USERS(token) {
   const options = {
     method: 'GET',
-    headers: { 'Authorization': 'Token ' + __MASTER_TOKEN__, 'content-type': 'json' },
+    headers: { 'Authorization': 'Token ' + token, 'content-type': 'json' },
     url: FORMAT_URL(`onlineusers/`),
   }
   return options

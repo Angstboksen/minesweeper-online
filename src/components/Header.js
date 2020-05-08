@@ -22,9 +22,6 @@ export class Header extends Component {
     }
 
     _logout = () => {
-        const { useremail } = this.props.credentials
-        let users = this.state.onlineUsers.filter(u => u.email !== useremail)
-        this.setState({ onlineUsers: users, onlineCount: this.state.onlineCount - 1 })
         this.props._resetState()
         this.props.history.push("/")
     }
@@ -129,7 +126,7 @@ export class Header extends Component {
                             </Form>*/}
                                 <Image id="headerpicture" src={userimageurl} roundedCircle />
                                 <GoogleLogout
-                                    clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
+                                    clientId={process.env.REACT_APP_GOOGLE_ID}
                                     buttonText="Logout"
                                     onLogoutSuccess={this._logout}
                                 />
@@ -139,7 +136,7 @@ export class Header extends Component {
                             !isSignedIn &&
                             <>
                                 <GoogleLogin
-                                    clientId="450224643692-epj8fht9ckfljd6pgr46g0gc0bts22jb.apps.googleusercontent.com"
+                                    clientId={process.env.REACT_APP_GOOGLE_ID}
                                     buttonText="Login with Google"
                                     onSuccess={this._login}
                                     onFailure={this.props._loginerror}

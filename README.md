@@ -1,6 +1,6 @@
 # Minesweeper Online
 
-Play minesweeper versus your friends. Log in with your google account to get features like leaderboards, spectating and multiplayer
+Play minesweeper versus your friends. Log in with your google account to get features like leaderboards, spectating and multiplayer (not yet implemented)
 
 ## Work on it yourself
 
